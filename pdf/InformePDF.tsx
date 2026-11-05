@@ -65,19 +65,19 @@ const fix = (s: string): string =>
     .replace(/[✓✗]/g, "");
 
 const styles = StyleSheet.create({
-  page: { padding: 34, fontSize: 9, color: C.ink, fontFamily: "Helvetica", lineHeight: 1.4 },
+  page: { padding: 34, fontSize: 9, color: C.ink, fontFamily: "Helvetica" },
   // Portada
   coverEyebrow: { fontSize: 10, color: C.muted, letterSpacing: 1, textTransform: "uppercase" },
-  coverTitle: { fontSize: 22, fontFamily: "Helvetica-Bold", marginTop: 6, color: C.ink },
-  coverMeta: { fontSize: 10, color: C.muted, marginTop: 6 },
+  coverTitle: { fontSize: 22, lineHeight: 1.2, fontFamily: "Helvetica-Bold", marginTop: 8, color: C.ink },
+  coverMeta: { fontSize: 10, color: C.muted, marginTop: 5 },
   verdictBox: { marginTop: 22, borderRadius: 6, padding: 16 },
   verdictLabel: { fontSize: 9, letterSpacing: 1, textTransform: "uppercase" },
-  verdictBig: { fontSize: 26, fontFamily: "Helvetica-Bold", marginTop: 2 },
+  verdictBig: { fontSize: 26, lineHeight: 1.2, fontFamily: "Helvetica-Bold", marginTop: 4, marginBottom: 2 },
   verdictP: { fontSize: 10, marginTop: 4 },
   // Secciones
-  h2: { fontSize: 13, fontFamily: "Helvetica-Bold", color: C.ink, marginBottom: 6 },
+  h2: { fontSize: 13, lineHeight: 1.2, fontFamily: "Helvetica-Bold", color: C.ink, marginBottom: 6 },
   section: { marginTop: 16 },
-  p: { fontSize: 9.5, color: C.ink, marginBottom: 3 },
+  p: { fontSize: 9.5, lineHeight: 1.45, color: C.ink, marginBottom: 3 },
   muted: { color: C.muted },
   // Tablas
   table: { borderWidth: 1, borderColor: C.line, borderRadius: 4 },
