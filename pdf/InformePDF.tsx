@@ -37,21 +37,22 @@ import type { Proyecto, DimKey } from "@/lib/tipos";
 
 /* ------------------------------- Paleta ---------------------------------- */
 const C = {
-  ink: "#14201f",
-  muted: "#566866",
-  line: "#d5dedd",
+  ink: "#14263b",
+  muted: "#5a6b7d",
+  line: "#cbd4de",
   surface: "#ffffff",
-  surface2: "#eaf0ef",
-  accent: "#0f6b66",
-  good: "#1b7544",
-  goodBg: "#d9f0e2",
-  warn: "#8f5600",
-  warnBg: "#fae9c6",
-  bad: "#b3261e",
-  badBg: "#f9d9d5",
+  surface2: "#e6ebf1",
+  navy: "#0e2a47",
+  accent: "#1f4e87",
+  good: "#1e6b4f",
+  goodBg: "#e2efe9",
+  warn: "#8a6a1e",
+  warnBg: "#f3ead3",
+  bad: "#a32f2a",
+  badBg: "#f1dedc",
 };
-const LVL_BG: Record<string, string> = { b: "#d9f0e2", m: "#fae9c6", a: "#fae1ce", c: "#f9d9d5" };
-const LVL_FG: Record<string, string> = { b: "#1b7544", m: "#8f5600", a: "#a33c11", c: "#b3261e" };
+const LVL_BG: Record<string, string> = { b: "#e2efe9", m: "#f3ead3", a: "#f2e2d6", c: "#f1dedc" };
+const LVL_FG: Record<string, string> = { b: "#1e6b4f", m: "#8a6a1e", a: "#9a4826", c: "#a32f2a" };
 const VERD_BG: Record<string, string> = { go: C.goodBg, cond: C.warnBg, nogo: C.badBg };
 const VERD_FG: Record<string, string> = { go: C.good, cond: C.warn, nogo: C.bad };
 const VERD_TXT: Record<string, string> = { go: "GO", cond: "GO CONDICIONADO", nogo: "NO GO" };
@@ -68,28 +69,29 @@ const styles = StyleSheet.create({
   page: { padding: 34, fontSize: 9, color: C.ink, fontFamily: "Helvetica" },
   // Portada
   coverEyebrow: { fontSize: 10, color: C.muted, letterSpacing: 1, textTransform: "uppercase" },
-  coverTitle: { fontSize: 22, lineHeight: 1.2, fontFamily: "Helvetica-Bold", marginTop: 8, color: C.ink },
+  coverTitle: { fontSize: 22, lineHeight: 1.2, fontFamily: "Helvetica-Bold", marginTop: 8, color: C.navy },
   coverMeta: { fontSize: 10, color: C.muted, marginTop: 5 },
-  verdictBox: { marginTop: 22, borderRadius: 6, padding: 16 },
+  coverRule: { borderBottomWidth: 2, borderBottomColor: C.navy, marginTop: 10 },
+  verdictBox: { marginTop: 18, borderRadius: 2, padding: 16, borderLeftWidth: 5 },
   verdictLabel: { fontSize: 9, letterSpacing: 1, textTransform: "uppercase" },
   verdictBig: { fontSize: 26, lineHeight: 1.2, fontFamily: "Helvetica-Bold", marginTop: 4, marginBottom: 2 },
   verdictP: { fontSize: 10, marginTop: 4 },
   // Secciones
-  h2: { fontSize: 13, lineHeight: 1.2, fontFamily: "Helvetica-Bold", color: C.ink, marginBottom: 6 },
+  h2: { fontSize: 12.5, lineHeight: 1.2, fontFamily: "Helvetica-Bold", color: C.navy, marginBottom: 7, paddingBottom: 3, borderBottomWidth: 1.5, borderBottomColor: C.navy, textTransform: "uppercase", letterSpacing: 0.3 },
   section: { marginTop: 16 },
   p: { fontSize: 9.5, lineHeight: 1.45, color: C.ink, marginBottom: 3 },
   muted: { color: C.muted },
   // Tablas
-  table: { borderWidth: 1, borderColor: C.line, borderRadius: 4 },
+  table: { borderWidth: 1, borderColor: C.line, borderRadius: 2 },
   tr: { flexDirection: "row", borderBottomWidth: 1, borderBottomColor: C.line },
   trLast: { flexDirection: "row" },
-  th: { fontSize: 8, color: C.muted, fontFamily: "Helvetica-Bold", padding: 4, backgroundColor: C.surface2 },
+  th: { fontSize: 7.5, color: "#ffffff", fontFamily: "Helvetica-Bold", padding: 4, backgroundColor: C.navy, textTransform: "uppercase", letterSpacing: 0.2 },
   td: { fontSize: 8.5, padding: 4, color: C.ink },
   // Tiles
   tilesRow: { flexDirection: "row", flexWrap: "wrap", gap: 6 },
-  tile: { borderWidth: 1, borderColor: C.line, borderRadius: 4, padding: 8, width: "31.5%" },
-  tileK: { fontSize: 8, color: C.muted },
-  tileV: { fontSize: 13, fontFamily: "Helvetica-Bold", marginTop: 2 },
+  tile: { borderWidth: 1, borderColor: C.line, borderLeftWidth: 2.5, borderLeftColor: C.accent, borderRadius: 2, padding: 8, width: "31.5%" },
+  tileK: { fontSize: 8, color: C.muted, textTransform: "uppercase", letterSpacing: 0.2 },
+  tileV: { fontSize: 13, fontFamily: "Helvetica-Bold", marginTop: 2, color: C.navy },
   tileS: { fontSize: 7.5, color: C.muted, marginTop: 1 },
   chip: { fontSize: 8, fontFamily: "Helvetica-Bold", paddingVertical: 1, paddingHorizontal: 5, borderRadius: 8 },
   split: { flexDirection: "row", gap: 10 },
@@ -211,7 +213,8 @@ export function InformePDF({ p, m, autores }: { p: Proyecto; m: Model; autores?:
         <Text style={styles.coverMeta}>
           {autores ? autores + " · " : ""}Analisis y Evaluacion de Proyectos
         </Text>
-        <View style={[styles.verdictBox, { backgroundColor: VERD_BG[v] }]} wrap={false}>
+        <View style={styles.coverRule} />
+        <View style={[styles.verdictBox, { backgroundColor: VERD_BG[v], borderLeftColor: VERD_FG[v] }]} wrap={false}>
           <Text style={[styles.verdictLabel, { color: VERD_FG[v] }]}>Dictamen</Text>
           <Text style={[styles.verdictBig, { color: VERD_FG[v] }]}>{VERD_TXT[v]}</Text>
           <Text style={[styles.verdictP, { color: VERD_FG[v] }]}>
