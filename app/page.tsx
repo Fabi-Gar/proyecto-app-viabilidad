@@ -75,6 +75,38 @@ export default function Page() {
   const m = useMemo(() => model(p), [p]);
   const errores = useMemo(() => contarErrores(validar(p)), [p]);
 
+  const [generando, setGenerando] = useState(false);
+  async function descargarPDF() {
+    setGenerando(true);
+    try {
+      const [{ pdf }, { InformePDF }] = await Promise.all([
+        import("@react-pdf/renderer"),
+        import("@/pdf/InformePDF"),
+      ]);
+      const blob = await pdf(<InformePDF p={p} m={m} />).toBlob();
+      const slug =
+        (p.nombre || "proyecto")
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[̀-ͯ]/g, "")
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "")
+          .slice(0, 50) || "proyecto";
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `informe-viabilidad-${slug}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error("Error al generar el PDF:", e);
+    } finally {
+      setGenerando(false);
+    }
+  }
+
   const tabs: Tab[] = [
     {
       id: "proy",
@@ -117,6 +149,9 @@ export default function Page() {
           <div className="right">
             <span className="gscore">{fmt(m.total, 0)} / 100</span>
             <span className={"pill " + m.verdict.v}>{PILL[m.verdict.v]}</span>
+            <button className="btn primary" onClick={descargarPDF} disabled={generando}>
+              {generando ? "Generando…" : "Descargar PDF"}
+            </button>
           </div>
         </header>
 
