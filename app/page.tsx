@@ -1,69 +1,144 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
 
-export default function Home() {
+/**
+ * Calculadora de viabilidad 360° — página principal.
+ *
+ * Mantiene el proyecto en estado, lo calcula en vivo con el motor (lib/calculo)
+ * y lo persiste en localStorage. Es genérica: arranca con el ejemplo, pero con
+ * "Empezar en blanco" se evalúa cualquier proyecto.
+ */
+import { useEffect, useMemo, useState } from "react";
+import { ProyCtx, type Mut } from "@/components/contexto";
+import { PanelProyecto } from "@/components/PanelProyecto";
+import { PanelRequerimientos } from "@/components/PanelRequerimientos";
+import { PanelEnfoque } from "@/components/PanelEnfoque";
+import { PanelFinanciera } from "@/components/PanelFinanciera";
+import { PanelRiesgos } from "@/components/PanelRiesgos";
+import { PanelCronograma } from "@/components/PanelCronograma";
+import { PanelDictamen } from "@/components/PanelDictamen";
+import { DIMS, model, fmt } from "@/lib/calculo";
+import { validar, contarErrores } from "@/lib/validacion";
+import { ejemplo } from "@/lib/ejemplos";
+import type { Proyecto } from "@/lib/tipos";
+
+const CLAVE = "viabilidad360-v1";
+
+const PILL: Record<string, string> = { go: "GO", cond: "GO CONDICIONADO", nogo: "NO GO" };
+
+interface Tab {
+  id: string;
+  n: string;
+  dot?: string;
+  render: () => React.ReactNode;
+}
+
+export default function Page() {
+  const [p, setP] = useState<Proyecto>(() => ejemplo());
+  const [tab, setTab] = useState("proy");
+
+  // Cargar desde localStorage después de montar (evita desajuste de hidratación).
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(CLAVE);
+      if (raw) {
+        const o = JSON.parse(raw) as Proyecto;
+        if (o && o.v === 1 && o.inv && o.scores && o.riesgos) {
+          o.requerimientos = o.requerimientos ?? [];
+          o.cicloVida = o.cicloVida ?? [];
+          o.cronograma = o.cronograma ?? [];
+          setP(o);
+        }
+      }
+    } catch {
+      /* ignora almacenamiento no disponible */
+    }
+  }, []);
+
+  // Persistir en cada cambio.
+  useEffect(() => {
+    try {
+      localStorage.setItem(CLAVE, JSON.stringify(p));
+    } catch {
+      /* ignora almacenamiento no disponible */
+    }
+  }, [p]);
+
+  const mut: Mut = (fn) =>
+    setP((prev) => {
+      const n = structuredClone(prev);
+      fn(n);
+      return n;
+    });
+
+  const reemplazar = (np: Proyecto) => setP(np);
+
+  const m = useMemo(() => model(p), [p]);
+  const errores = useMemo(() => contarErrores(validar(p)), [p]);
+
+  const tabs: Tab[] = [
+    {
+      id: "proy",
+      n: "Proyecto",
+      dot: errores > 0 ? String(errores) : undefined,
+      render: () => <PanelProyecto />,
+    },
+    { id: "req", n: "Requerimientos", render: () => <PanelRequerimientos /> },
+    ...DIMS.map((d) => ({
+      id: d.k,
+      n: d.tab,
+      dot: fmt(m.sc[d.k], 0),
+      render: () =>
+        d.kind === "fin" ? (
+          <PanelFinanciera />
+        ) : d.kind === "risk" ? (
+          <PanelRiesgos />
+        ) : (
+          <PanelEnfoque dim={d} />
+        ),
+    })),
+    { id: "crono", n: "Cronograma", render: () => <PanelCronograma /> },
+    { id: "dic", n: "Dictamen", dot: fmt(m.total, 0), render: () => <PanelDictamen /> },
+  ];
+
+  // Inserta Requerimientos justo después de Proyecto y Cronograma después de Ciclo de vida.
+  const orden = ["proy", "req", "tec", "ope", "mer", "fin", "amb", "est", "rie", "cic", "crono", "dic"];
+  tabs.sort((a, b) => orden.indexOf(a.id) - orden.indexOf(b.id));
+
+  const activa = tabs.find((t) => t.id === tab) ?? tabs[0];
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.tsx</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
+    <ProyCtx.Provider value={{ p, mut, m, reemplazar }}>
+      <div className="wrap">
+        <header className="top">
+          <div className="t">
+            <div className="eyebrow">Plantilla de viabilidad 360°</div>
+            <div className="pname">{p.nombre || "Proyecto sin nombre"}</div>
+          </div>
+          <div className="right">
+            <span className="gscore">{fmt(m.total, 0)} / 100</span>
+            <span className={"pill " + m.verdict.v}>{PILL[m.verdict.v]}</span>
+          </div>
+        </header>
+
+        <nav id="tabs" role="tablist">
+          {tabs.map((t) => (
+            <button
+              key={t.id}
+              role="tab"
+              aria-selected={t.id === tab}
+              onClick={() => {
+                setTab(t.id);
+                window.scrollTo({ top: 0 });
+              }}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+              {t.n}
+              {t.dot !== undefined && <span className="dot">{t.dot}</span>}
+            </button>
+          ))}
+        </nav>
+
+        <main>{activa.render()}</main>
+      </div>
+    </ProyCtx.Provider>
   );
 }
