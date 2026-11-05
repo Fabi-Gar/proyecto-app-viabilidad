@@ -5,6 +5,7 @@
 import { useProy } from "./contexto";
 import { NumInput } from "./campos";
 import { Radar } from "./Graficas";
+import { BotonesEnvio } from "./BotonesEnvio";
 import { DIMS, fmt } from "@/lib/calculo";
 
 const NOMBRE: Record<string, string> = {
@@ -106,6 +107,8 @@ export function PanelDictamen() {
           )}
         </div>
       </div>
+
+      <BotonesEnvio />
     </section>
   );
 }
