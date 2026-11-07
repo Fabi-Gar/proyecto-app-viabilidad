@@ -1,0 +1,321 @@
+{
+  "v": 1,
+  "nombre": "FoxMeyer · Decisión de 1993 (evidencia neutral)",
+  "moneda": "US$ miles",
+  "desc": "Proyecto SAP R/3 y almacén automatizado de FoxMeyer Drug (distribuidor farmacéutico, EE. UU.), evaluado con las cifras de la decisión inicial de 1993: presupuesto US$65 M y ahorros esperados de US$40–50 M al año. Cifras en miles de US$. Donde la fuente no aporta evidencia, la calificación es neutral (3). Caso de validación; no es el proyecto del equipo.",
+  "horizonte": 5,
+  "tasa": 12,
+  "residual": 0,
+  "conting": 10,
+  "inv": [
+    {
+      "n": "Presupuesto inicial del proyecto R/3 y almacén automatizado (1993)",
+      "v": 65000
+    }
+  ],
+  "ben": [
+    {
+      "n": "Ahorros anuales esperados (punto medio de US$40–50 M)",
+      "v": 45000,
+      "g": 0
+    }
+  ],
+  "cos": [
+    {
+      "n": "Costo operativo anual. SUPUESTO del equipo, no está en la fuente: costo operativo anual = 10% del presupuesto.",
+      "v": 6500,
+      "g": 0
+    }
+  ],
+  "mc": {
+    "bmin": -30,
+    "bmax": 20,
+    "cmin": -5,
+    "cmax": 25,
+    "imin": -5,
+    "imax": 30
+  },
+  "esc": {
+    "pes": {
+      "b": 70,
+      "c": 120,
+      "i": 115
+    },
+    "opt": {
+      "b": 120,
+      "c": 95,
+      "i": 100
+    }
+  },
+  "pesos": {
+    "tec": 15,
+    "ope": 10,
+    "mer": 5,
+    "fin": 25,
+    "amb": 5,
+    "est": 10,
+    "rie": 20,
+    "cic": 10
+  },
+  "umbralGo": 70,
+  "umbralCond": 55,
+  "foda": {
+    "f": "Presupuesto y ahorro esperado definidos (US$65 M; US$40–50 M al año)\nAutomatización del almacén para reducir costos operativos",
+    "d": "Sin evidencia en las fuentes consultadas.",
+    "o": "Ahorros esperados de US$40–50 M anuales",
+    "a": "Quiebra del cliente principal Phar-Mor (mayo 1993)"
+  },
+  "scores": {
+    "tec": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "ope": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "mer": [
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "amb": [
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "est": [
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "cic": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ]
+  },
+  "notes": {
+    "tec": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "ope": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "mer": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "amb": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "est": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "cic": [
+      "Cifras de presupuesto y ahorro esperado tomadas de la fuente; el resto es neutral por falta de evidencia.",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "riesgos": [
+    {
+      "n": "Riesgos no documentados en la fuente (supuesto neutro de la evaluación inicial)",
+      "t": "Operativo",
+      "p": 3,
+      "i": 3,
+      "m": 0
+    }
+  ],
+  "requerimientos": [
+    {
+      "id": "RF-01",
+      "texto": "Implementar SAP R/3 en FoxMeyer Drug (derivado de la fuente)",
+      "tipo": "Funcional",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "RF-02",
+      "texto": "Automatizar un almacén nuevo con software integrado a R/3 (derivado de la fuente)",
+      "tipo": "Funcional",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "RNF-01",
+      "texto": "Procesar el volumen de transacciones que hoy maneja el mainframe, unas 420,000 por día (derivado de la fuente)",
+      "tipo": "No funcional",
+      "prioridad": "Alta"
+    }
+  ],
+  "cicloVida": [
+    {
+      "fase": "Perfil",
+      "estado": "Completada",
+      "nota": "Presupuesto de US$65 M y ahorro esperado de US$40–50 M anuales definidos (CACM)."
+    },
+    {
+      "fase": "Prefactibilidad",
+      "estado": "Pendiente",
+      "nota": "Sin evidencia en las fuentes consultadas."
+    },
+    {
+      "fase": "Factibilidad",
+      "estado": "Pendiente",
+      "nota": "Sin evidencia en las fuentes consultadas."
+    },
+    {
+      "fase": "Monitoreo",
+      "estado": "Pendiente",
+      "nota": "Sin evidencia en las fuentes consultadas."
+    },
+    {
+      "fase": "Evaluación ex-post",
+      "estado": "Pendiente",
+      "nota": "Fuera del alcance de la evaluación de 1993."
+    }
+  ],
+  "cronograma": [
+    {
+      "fase": "Inicio del proyecto R/3 y del almacén automatizado",
+      "inicio": "1993",
+      "fin": "s/f",
+      "responsable": "FoxMeyer Drug"
+    },
+    {
+      "fase": "Quiebra del cliente principal (Phar-Mor)",
+      "inicio": "1993-05",
+      "fin": "1993-05",
+      "responsable": "Hecho externo"
+    }
+  ],
+  "pestel": [
+    {
+      "tipo": "Político",
+      "efecto": "Neutro",
+      "descripcion": "Sin evidencia en las fuentes consultadas.",
+      "nota": ""
+    },
+    {
+      "tipo": "Económico",
+      "efecto": "Desfavorable",
+      "descripcion": "Quiebra del cliente principal Phar-Mor (mayo 1993).",
+      "nota": "CACM (Scott & Vessey)"
+    },
+    {
+      "tipo": "Social",
+      "efecto": "Neutro",
+      "descripcion": "Sin evidencia en las fuentes consultadas.",
+      "nota": ""
+    },
+    {
+      "tipo": "Tecnológico",
+      "efecto": "Neutro",
+      "descripcion": "Software SAP R/3 y automatización de almacén integrada.",
+      "nota": "Sin evidencia de pruebas de capacidad en la fuente."
+    },
+    {
+      "tipo": "Ambiental",
+      "efecto": "Neutro",
+      "descripcion": "Sin evidencia en las fuentes consultadas.",
+      "nota": ""
+    },
+    {
+      "tipo": "Legal",
+      "efecto": "Neutro",
+      "descripcion": "Sin evidencia en las fuentes consultadas.",
+      "nota": ""
+    }
+  ],
+  "bsc": [
+    {
+      "perspectiva": "Financiera",
+      "objetivo": "Ahorrar US$40–50 M al año",
+      "iniciativaTI": "SAP R/3 y almacén automatizado",
+      "indicador": "Ahorro anual",
+      "meta": "US$40–50 M"
+    },
+    {
+      "perspectiva": "Clientes",
+      "objetivo": "Sin evidencia en las fuentes consultadas.",
+      "iniciativaTI": "—",
+      "indicador": "—",
+      "meta": "—"
+    },
+    {
+      "perspectiva": "Procesos internos",
+      "objetivo": "Automatizar el almacén e integrarlo con R/3",
+      "iniciativaTI": "Software de automatización de almacén",
+      "indicador": "Transacciones diarias procesadas",
+      "meta": "~420,000 (volumen del mainframe)"
+    },
+    {
+      "perspectiva": "Aprendizaje y crecimiento",
+      "objetivo": "Sin evidencia en las fuentes consultadas.",
+      "iniciativaTI": "—",
+      "indicador": "—",
+      "meta": "—"
+    }
+  ],
+  "kpis": [
+    {
+      "indicador": "Costo del proyecto",
+      "meta": "US$65 M",
+      "frecuencia": "No documentada",
+      "responsable": "FoxMeyer Drug",
+      "fuente": "CACM (Scott & Vessey)"
+    },
+    {
+      "indicador": "Ahorro anual",
+      "meta": "US$40–50 M",
+      "frecuencia": "No documentada",
+      "responsable": "FoxMeyer Drug",
+      "fuente": "CACM (Scott & Vessey)"
+    }
+  ],
+  "validacion": {
+    "resultadoReal": "Fracaso",
+    "fuente": "Scott & Vessey, «Managing Risks in Enterprise Systems Implementations», Communications of the ACM (https://cacm.acm.org/research/managing-risks-in-enterprise-systems-implementations). Otra fuente (CIO Australia) da un presupuesto de US$35 M y un costo real de ~US$70 M, afirmado por la propia empresa; las fuentes no coinciden.",
+    "notas": "Resultado real: cargo de US$34 M por errores de inventario y pedidos (jul 1996), quiebra (Chapter 11) en ago 1996, venta a McKesson por ~US$80 M y liquidación de activos en nov 1997. Este archivo usa solo las cifras de la decisión y calificaciones neutrales; ver el archivo de seguimiento 1995-1996 para la evaluación con la evidencia documentada durante la ejecución. SUPUESTO: tasa de descuento 12% (valor por defecto de la plantilla; no está en la fuente)."
+  }
+}

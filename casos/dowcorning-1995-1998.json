@@ -1,0 +1,397 @@
+{
+  "v": 1,
+  "nombre": "Dow Corning · Implementación global de SAP R/3 (1995-1998)",
+  "moneda": "US$ miles",
+  "desc": "Implementación de SAP R/3 en Dow Corning (química, ~9,000 empleados): 48 entidades legales, 109 sitios, 17 países. Presupuesto US$100 M, meta de reducción de costos de US$200 M anuales para 2000. Cifras en miles de US$. Éxito de implementación (a tiempo y bajo presupuesto); el ahorro financiero logrado no está reportado. Caso de validación; no es el proyecto del equipo.",
+  "horizonte": 5,
+  "tasa": 12,
+  "residual": 0,
+  "conting": 10,
+  "inv": [
+    {
+      "n": "Presupuesto del proyecto SAP R/3 (concluyó por debajo de US$100 M)",
+      "v": 100000
+    }
+  ],
+  "ben": [
+    {
+      "n": "Meta de reducción de costos anual (US$200 M para 2000, objetivo de la empresa)",
+      "v": 200000,
+      "g": 0
+    }
+  ],
+  "cos": [
+    {
+      "n": "Costo operativo anual. SUPUESTO del equipo, no está en la fuente: costo operativo anual = 10% de US$100 M.",
+      "v": 10000,
+      "g": 0
+    }
+  ],
+  "mc": {
+    "bmin": -30,
+    "bmax": 20,
+    "cmin": -5,
+    "cmax": 25,
+    "imin": -5,
+    "imax": 30
+  },
+  "esc": {
+    "pes": {
+      "b": 70,
+      "c": 120,
+      "i": 115
+    },
+    "opt": {
+      "b": 120,
+      "c": 95,
+      "i": 100
+    }
+  },
+  "pesos": {
+    "tec": 15,
+    "ope": 10,
+    "mer": 5,
+    "fin": 25,
+    "amb": 5,
+    "est": 10,
+    "rie": 20,
+    "cic": 10
+  },
+  "umbralGo": 70,
+  "umbralCond": 55,
+  "foda": {
+    "f": "Equipo global dedicado (~40 profesionales) y consultoría menor al 10% del costo\nDespliegue por hitos de aprobación por sitio\nCapacitación masiva (más de 500 personas en la «Pride Academy»)",
+    "d": "Estabilización lenta en los sitios piloto (casi 18 meses)\nImpacto financiero difícil de medir (confundido por otros factores)",
+    "o": "Meta de reducir costos en US$200 M anuales para 2000\nConsolidar puntos de pedido en Europa (de 9-10 a 5, con plan de 3)\nApagar el mainframe europeo",
+    "a": "Complejidad: 48 entidades, 109 sitios, 17 países\nDeterioro temporal del cumplimiento de fechas al cliente durante el despliegue\nLitigios por unos US$2,000 M que presionaban a la empresa (CACM)"
+  },
+  "scores": {
+    "tec": [
+      3,
+      3,
+      4,
+      4,
+      3,
+      4
+    ],
+    "ope": [
+      3,
+      4,
+      3,
+      3,
+      2,
+      3
+    ],
+    "mer": [
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "amb": [
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "est": [
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "cic": [
+      4,
+      3,
+      3,
+      4,
+      4,
+      2
+    ]
+  },
+  "notes": {
+    "tec": [
+      "",
+      "",
+      "Piloto en tres sitios del Reino Unido desde el 30 sep 1996; tardó casi 18 meses en estabilizarse (Ross).",
+      "Hasta 1,500 usuarios concurrentes (casi 9,000 registrados) y datos de 0.5 TB a 4 TB (Ross).",
+      "",
+      "Equipo global de ~40 profesionales desde jun 1995; consultoría menor al 10% del costo (Ross)."
+    ],
+    "ope": [
+      "",
+      "Más de 500 personas pasaron por la «Pride Academy» de capacitación (Ross).",
+      "",
+      "",
+      "El cumplimiento de la fecha solicitada por el cliente empeoró durante el despliegue y mejoraba a inicios de 1999 (Ross).",
+      ""
+    ],
+    "mer": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "amb": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "est": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "cic": [
+      "",
+      "",
+      "",
+      "Despliegue por hitos de aprobación («Milestone C») por sitio (Ross).",
+      "Metas explícitas: reducción de costos de US$200 M anuales para 2000 (Ross).",
+      "El impacto financiero de las consolidaciones en Europa quedó «confundido por otros factores»: no hay medición clara ex-post (Ross)."
+    ]
+  },
+  "riesgos": [
+    {
+      "n": "Estabilización lenta en sitios piloto (casi 18 meses)",
+      "t": "Operativo",
+      "p": 4,
+      "i": 3,
+      "m": 50
+    },
+    {
+      "n": "Deterioro temporal del servicio al cliente durante el despliegue",
+      "t": "Mercado",
+      "p": 3,
+      "i": 3,
+      "m": 25
+    },
+    {
+      "n": "Complejidad: 48 entidades, 109 sitios, 17 países y datos 8 veces mayores",
+      "t": "Tecnológico",
+      "p": 3,
+      "i": 4,
+      "m": 50
+    },
+    {
+      "n": "Cambio de procesos (consolidar puntos de pedido de 9-10 a 5)",
+      "t": "Organizacional",
+      "p": 3,
+      "i": 3,
+      "m": 50
+    },
+    {
+      "n": "Sitios de Argentina y Brasil sin aprobar el hito final",
+      "t": "Operativo",
+      "p": 3,
+      "i": 2,
+      "m": 25
+    }
+  ],
+  "requerimientos": [
+    {
+      "id": "RF-01",
+      "texto": "Unificar los procesos en una sola plataforma SAP R/3 en 48 entidades legales, 109 sitios y 17 países (derivado de la fuente)",
+      "tipo": "Funcional",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "RF-02",
+      "texto": "Consolidar los puntos de aceptación de pedidos en Europa (de 9-10 a 5, con plan de 3)",
+      "tipo": "Funcional",
+      "prioridad": "Media"
+    },
+    {
+      "id": "RNF-01",
+      "texto": "Soportar hasta 1,500 usuarios concurrentes (casi 9,000 registrados)",
+      "tipo": "No funcional",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "RNF-02",
+      "texto": "Gestionar el crecimiento de datos de 0.5 TB a 4 TB",
+      "tipo": "No funcional",
+      "prioridad": "Media"
+    },
+    {
+      "id": "RNF-03",
+      "texto": "Apagar el mainframe europeo (8 de enero de 1999)",
+      "tipo": "No funcional",
+      "prioridad": "Media"
+    }
+  ],
+  "cicloVida": [
+    {
+      "fase": "Perfil",
+      "estado": "Completada",
+      "nota": "Presupuesto de US$100 M y meta de US$200 M anuales definidos; equipo global formado en jun 1995 (Ross)."
+    },
+    {
+      "fase": "Prefactibilidad",
+      "estado": "Pendiente",
+      "nota": "Sin evidencia en las fuentes consultadas."
+    },
+    {
+      "fase": "Factibilidad",
+      "estado": "Completada",
+      "nota": "Piloto en tres sitios del Reino Unido desde el 30 sep 1996; tardó casi 18 meses en estabilizarse (Ross)."
+    },
+    {
+      "fase": "Monitoreo",
+      "estado": "Completada",
+      "nota": "Despliegue por hitos de aprobación («Milestone C») por sitio (Ross)."
+    },
+    {
+      "fase": "Evaluación ex-post",
+      "estado": "Pendiente",
+      "nota": "Ross no reporta ahorros logrados: el impacto financiero quedó confundido por otros factores."
+    }
+  ],
+  "cronograma": [
+    {
+      "fase": "Formación del equipo global (~40 profesionales)",
+      "inicio": "1995-06",
+      "fin": "1995-06",
+      "responsable": "Equipo global de proyecto"
+    },
+    {
+      "fase": "Piloto en tres sitios del Reino Unido",
+      "inicio": "1996-09-30",
+      "fin": "s/f (estabilización de casi 18 meses)",
+      "responsable": "Equipo global de proyecto"
+    },
+    {
+      "fase": "Corte de la planta de Midland (EE. UU.)",
+      "inicio": "1998-10-01",
+      "fin": "1998-10-01",
+      "responsable": "Equipo global de proyecto"
+    },
+    {
+      "fase": "Plazo de implementación completa (sin módulo de RR. HH.)",
+      "inicio": "1998-12",
+      "fin": "1998-12",
+      "responsable": "Equipo global de proyecto"
+    },
+    {
+      "fase": "Apagado del mainframe en Europa",
+      "inicio": "1999-01-08",
+      "fin": "1999-01-08",
+      "responsable": "TI Dow Corning"
+    }
+  ],
+  "pestel": [
+    {
+      "tipo": "Político",
+      "efecto": "Neutro",
+      "descripcion": "Sin evidencia en las fuentes consultadas.",
+      "nota": ""
+    },
+    {
+      "tipo": "Económico",
+      "efecto": "Neutro",
+      "descripcion": "Sin evidencia en las fuentes consultadas.",
+      "nota": ""
+    },
+    {
+      "tipo": "Social",
+      "efecto": "Neutro",
+      "descripcion": "Sin evidencia en las fuentes consultadas.",
+      "nota": ""
+    },
+    {
+      "tipo": "Tecnológico",
+      "efecto": "Favorable",
+      "descripcion": "SAP R/3 operó en 109 sitios y 17 países con casi 9,000 usuarios registrados.",
+      "nota": "Ross, MIT CISR WP 305"
+    },
+    {
+      "tipo": "Ambiental",
+      "efecto": "Neutro",
+      "descripcion": "Sin evidencia en las fuentes consultadas.",
+      "nota": ""
+    },
+    {
+      "tipo": "Legal",
+      "efecto": "Desfavorable",
+      "descripcion": "La empresa enfrentaba litigios por unos US$2,000 M.",
+      "nota": "CACM (Scott & Vessey)"
+    }
+  ],
+  "bsc": [
+    {
+      "perspectiva": "Financiera",
+      "objetivo": "Reducir costos operativos",
+      "iniciativaTI": "SAP R/3 global",
+      "indicador": "Reducción anual de costos",
+      "meta": "US$200 M para 2000"
+    },
+    {
+      "perspectiva": "Clientes",
+      "objetivo": "Atender mejor al cliente con procesos de pedido consolidados",
+      "iniciativaTI": "Consolidación de puntos de pedido",
+      "indicador": "Cumplimiento de la fecha solicitada por el cliente",
+      "meta": "Sin meta numérica en la fuente"
+    },
+    {
+      "perspectiva": "Procesos internos",
+      "objetivo": "Estandarizar los procesos globales",
+      "iniciativaTI": "Plantilla de procesos SAP común",
+      "indicador": "Puntos de aceptación de pedidos en Europa",
+      "meta": "3 (de 9-10 originales)"
+    },
+    {
+      "perspectiva": "Aprendizaje y crecimiento",
+      "objetivo": "Capacitar a los usuarios en el nuevo sistema",
+      "iniciativaTI": "«Pride Academy»",
+      "indicador": "Personas capacitadas",
+      "meta": "Sin meta en la fuente"
+    }
+  ],
+  "kpis": [
+    {
+      "indicador": "Costo del proyecto",
+      "meta": "Máximo US$100 M",
+      "frecuencia": "No documentada",
+      "responsable": "Dow Corning",
+      "fuente": "Ross, MIT CISR WP 305",
+      "valorReal": "Por debajo de US$100 M (cifra exacta no publicada)"
+    },
+    {
+      "indicador": "Plazo de implementación",
+      "meta": "Diciembre de 1998",
+      "frecuencia": "Por hito de sitio",
+      "responsable": "Equipo global de proyecto",
+      "fuente": "Ross, MIT CISR WP 305; CACM (Scott & Vessey)",
+      "valorReal": "Cumplido, excepto el módulo de RR. HH."
+    },
+    {
+      "indicador": "Reducción anual de costos",
+      "meta": "US$200 M para 2000",
+      "frecuencia": "No documentada",
+      "responsable": "Dow Corning",
+      "fuente": "Ross, MIT CISR WP 305",
+      "valorReal": "No reportado: impacto confundido por otros factores"
+    },
+    {
+      "indicador": "Puntos de aceptación de pedidos en Europa",
+      "meta": "3",
+      "frecuencia": "No documentada",
+      "responsable": "Dow Corning",
+      "fuente": "Ross, MIT CISR WP 305",
+      "valorReal": "5 (plan de llegar a 3)"
+    }
+  ],
+  "validacion": {
+    "resultadoReal": "Éxito",
+    "fuente": "Ross, «Dow Corning Corporation C: Transforming the Organization», MIT CISR Working Paper 305 (junio 1999), https://core.ac.uk/download/4380409.pdf; y CACM (misma referencia que FoxMeyer) para fechas y entrega en plazo.",
+    "notas": "Éxito de IMPLEMENTACIÓN: se completó en dic 1998 (excepto el módulo de RR. HH.), a tiempo y bajo el presupuesto de US$100 M. NO hay cifra de ahorro logrado: Ross indica que el impacto financiero quedó confundido por otros factores. La meta de US$200 M anuales es un objetivo de la empresa, probablemente de toda la transformación y no solo de SAP; úsese con cautela (la plantilla trae sensibilidad y escenarios). SUPUESTO: tasa de descuento 12% (valor por defecto de la plantilla; no está en la fuente)."
+  }
+}

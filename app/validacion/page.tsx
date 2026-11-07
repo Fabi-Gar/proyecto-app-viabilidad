@@ -224,7 +224,7 @@ export default function ValidacionPage() {
                     <tr>
                       <th className="l">Caso</th>
                       <th className="l">Resultado real</th>
-                      <th className="l">Fuente</th>
+                      <th className="l src">Fuente</th>
                       <th>VAN</th>
                       <th>TIR</th>
                       <th>B/C</th>
@@ -244,7 +244,7 @@ export default function ValidacionPage() {
                           </Link>
                         </td>
                         <td className="l">{fila.resultadoReal}</td>
-                        <td className="l">{fila.fuente}</td>
+                        <td className="l src">{fila.fuente}</td>
                         <td className="n">{fila.van}</td>
                         <td className="n">{fila.tir}</td>
                         <td className="n">{fila.bc}</td>

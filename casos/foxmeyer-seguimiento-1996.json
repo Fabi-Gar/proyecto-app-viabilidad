@@ -1,0 +1,396 @@
+{
+  "v": 1,
+  "nombre": "FoxMeyer · Seguimiento 1995-1996 (evidencia documentada)",
+  "moneda": "US$ miles",
+  "desc": "Mismo proyecto que el caso de 1993, reevaluado con la evidencia documentada durante la ejecución: costo que sube a más de US$100 M, cronograma recortado 90 días, fuga de personal, capacidad de R/3 de 10,000 transacciones por día frente a 420,000 del mainframe y pérdida del cliente principal. Cifras en miles de US$. Caso de validación; no es el proyecto del equipo.",
+  "horizonte": 5,
+  "tasa": 12,
+  "residual": 0,
+  "conting": 10,
+  "inv": [
+    {
+      "n": "Costo del proyecto que sube a más de US$100 M (se usa 100,000 como piso)",
+      "v": 100000
+    }
+  ],
+  "ben": [
+    {
+      "n": "Ahorros anuales esperados por la empresa (punto medio de US$40–50 M; no se reducen por falta de dato)",
+      "v": 45000,
+      "g": 0
+    }
+  ],
+  "cos": [
+    {
+      "n": "Costo operativo anual. SUPUESTO del equipo, no está en la fuente: costo operativo anual = 10% de US$65 M.",
+      "v": 6500,
+      "g": 0
+    }
+  ],
+  "mc": {
+    "bmin": -30,
+    "bmax": 20,
+    "cmin": -5,
+    "cmax": 25,
+    "imin": -5,
+    "imax": 30
+  },
+  "esc": {
+    "pes": {
+      "b": 70,
+      "c": 120,
+      "i": 115
+    },
+    "opt": {
+      "b": 120,
+      "c": 95,
+      "i": 100
+    }
+  },
+  "pesos": {
+    "tec": 15,
+    "ope": 10,
+    "mer": 5,
+    "fin": 25,
+    "amb": 5,
+    "est": 10,
+    "rie": 20,
+    "cic": 10
+  },
+  "umbralGo": 70,
+  "umbralCond": 55,
+  "foda": {
+    "f": "Presupuesto y ahorro esperado definidos (US$65 M; US$40–50 M al año)",
+    "d": "Cronograma recortado 90 días sin tiempo para rediseñar procesos\nPersonal de almacenes se fue y el equipo pidió más salario\nR/3 con ~10,000 transacciones diarias frente a 420,000 del mainframe",
+    "o": "Ahorros esperados de US$40–50 M anuales",
+    "a": "Quiebra del cliente principal Phar-Mor (mayo 1993)\nCompromisos con clientes (contrato UHC) que recortaron el plazo\nCostos que pasaron de US$65 M a más de US$100 M"
+  },
+  "scores": {
+    "tec": [
+      2,
+      3,
+      3,
+      1,
+      3,
+      2
+    ],
+    "ope": [
+      1,
+      3,
+      2,
+      3,
+      2,
+      3
+    ],
+    "mer": [
+      3,
+      2,
+      3,
+      3,
+      3
+    ],
+    "amb": [
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "est": [
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "cic": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ]
+  },
+  "notes": {
+    "tec": [
+      "Cronograma recortado 90 días tras firmar el contrato con UHC, sin tiempo para rediseñar procesos (CACM).",
+      "",
+      "",
+      "R/3 manejaba ~10,000 transacciones diarias frente a 420,000 del mainframe de FoxMeyer (CACM).",
+      "",
+      "El personal del proyecto pidió salarios mayores por sus nuevas habilidades en R/3 (CACM)."
+    ],
+    "ope": [
+      "Empleados de los almacenes existentes se fueron en masa antes de que abriera el almacén automatizado, temiendo perder el empleo (CACM).",
+      "",
+      "No hubo tiempo para rediseñar los procesos por el recorte de 90 días (CACM).",
+      "",
+      "Cargo de US$34 M por errores de inventario y pedidos en jul 1996 (CACM).",
+      ""
+    ],
+    "mer": [
+      "",
+      "Phar-Mor, cliente principal, quebró en mayo 1993 (CACM).",
+      "",
+      "",
+      ""
+    ],
+    "amb": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "est": [
+      "",
+      "",
+      "",
+      "",
+      ""
+    ],
+    "cic": [
+      "",
+      "",
+      "",
+      "",
+      "",
+      ""
+    ]
+  },
+  "riesgos": [
+    {
+      "n": "Cronograma comprimido en 90 días sin rediseño de procesos",
+      "t": "Operativo",
+      "p": 4,
+      "i": 4,
+      "m": 0
+    },
+    {
+      "n": "Fuga de personal de los almacenes y presión salarial del equipo del proyecto",
+      "t": "Organizacional",
+      "p": 4,
+      "i": 4,
+      "m": 0
+    },
+    {
+      "n": "Pérdida del cliente principal (Phar-Mor, quiebra de mayo 1993)",
+      "t": "Mercado",
+      "p": 3,
+      "i": 5,
+      "m": 0
+    },
+    {
+      "n": "Capacidad de R/3 muy inferior al volumen del mainframe (10,000 contra 420,000 transacciones por día)",
+      "t": "Tecnológico",
+      "p": 4,
+      "i": 5,
+      "m": 0
+    },
+    {
+      "n": "Costos por encima del presupuesto (US$65 M a más de US$100 M)",
+      "t": "Financiero",
+      "p": 4,
+      "i": 4,
+      "m": 0
+    },
+    {
+      "n": "Automatización ambiciosa del almacén integrada con R/3",
+      "t": "Tecnológico",
+      "p": 3,
+      "i": 4,
+      "m": 0
+    }
+  ],
+  "requerimientos": [
+    {
+      "id": "RF-01",
+      "texto": "Implementar SAP R/3 en FoxMeyer Drug (derivado de la fuente)",
+      "tipo": "Funcional",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "RF-02",
+      "texto": "Automatizar un almacén nuevo con software integrado a R/3 (derivado de la fuente)",
+      "tipo": "Funcional",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "RF-03",
+      "texto": "Atender el contrato con el cliente UHC, que recortó el plazo en 90 días (derivado de la fuente)",
+      "tipo": "Funcional",
+      "prioridad": "Alta"
+    },
+    {
+      "id": "RNF-01",
+      "texto": "Procesar unas 420,000 transacciones por día como el mainframe (R/3 llegó a ~10,000)",
+      "tipo": "No funcional",
+      "prioridad": "Alta"
+    }
+  ],
+  "cicloVida": [
+    {
+      "fase": "Perfil",
+      "estado": "Completada",
+      "nota": "Presupuesto de US$65 M y ahorro esperado de US$40–50 M anuales definidos (CACM)."
+    },
+    {
+      "fase": "Prefactibilidad",
+      "estado": "Pendiente",
+      "nota": "Sin evidencia en las fuentes consultadas."
+    },
+    {
+      "fase": "Factibilidad",
+      "estado": "Pendiente",
+      "nota": "Sin evidencia de prueba de capacidad antes de la puesta en marcha."
+    },
+    {
+      "fase": "Monitoreo",
+      "estado": "Pendiente",
+      "nota": "La fuente no describe un plan de monitoreo; el costo subió a más de US$100 M."
+    },
+    {
+      "fase": "Evaluación ex-post",
+      "estado": "Pendiente",
+      "nota": "No se llegó: la empresa quebró en ago 1996."
+    }
+  ],
+  "cronograma": [
+    {
+      "fase": "Inicio del proyecto R/3 y del almacén automatizado",
+      "inicio": "1993",
+      "fin": "s/f",
+      "responsable": "FoxMeyer Drug"
+    },
+    {
+      "fase": "Quiebra del cliente principal (Phar-Mor)",
+      "inicio": "1993-05",
+      "fin": "1993-05",
+      "responsable": "Hecho externo"
+    },
+    {
+      "fase": "Cronograma recortado 90 días tras el contrato con UHC",
+      "inicio": "s/f",
+      "fin": "s/f",
+      "responsable": "FoxMeyer Drug"
+    },
+    {
+      "fase": "Cargo de US$34 M por errores de inventario y pedidos",
+      "inicio": "1996-07",
+      "fin": "1996-07",
+      "responsable": "FoxMeyer Drug"
+    },
+    {
+      "fase": "Quiebra (Chapter 11)",
+      "inicio": "1996-08",
+      "fin": "1996-08",
+      "responsable": "FoxMeyer Drug"
+    },
+    {
+      "fase": "Liquidación de los activos principales",
+      "inicio": "1997-11",
+      "fin": "1997-11",
+      "responsable": "Síndico"
+    }
+  ],
+  "pestel": [
+    {
+      "tipo": "Político",
+      "efecto": "Neutro",
+      "descripcion": "Sin evidencia en las fuentes consultadas.",
+      "nota": ""
+    },
+    {
+      "tipo": "Económico",
+      "efecto": "Desfavorable",
+      "descripcion": "Quiebra del cliente principal Phar-Mor (mayo 1993).",
+      "nota": "CACM (Scott & Vessey)"
+    },
+    {
+      "tipo": "Social",
+      "efecto": "Desfavorable",
+      "descripcion": "Empleados de los almacenes existentes se fueron en masa temiendo perder el empleo.",
+      "nota": "CACM (Scott & Vessey)"
+    },
+    {
+      "tipo": "Tecnológico",
+      "efecto": "Desfavorable",
+      "descripcion": "R/3 procesaba ~10,000 transacciones por día frente a 420,000 del mainframe.",
+      "nota": "CACM (Scott & Vessey)"
+    },
+    {
+      "tipo": "Ambiental",
+      "efecto": "Neutro",
+      "descripcion": "Sin evidencia en las fuentes consultadas.",
+      "nota": ""
+    },
+    {
+      "tipo": "Legal",
+      "efecto": "Neutro",
+      "descripcion": "Sin evidencia en las fuentes consultadas.",
+      "nota": ""
+    }
+  ],
+  "bsc": [
+    {
+      "perspectiva": "Financiera",
+      "objetivo": "Ahorrar US$40–50 M al año",
+      "iniciativaTI": "SAP R/3 y almacén automatizado",
+      "indicador": "Ahorro anual",
+      "meta": "US$40–50 M"
+    },
+    {
+      "perspectiva": "Clientes",
+      "objetivo": "Cumplir los compromisos con clientes (contrato UHC)",
+      "iniciativaTI": "Puesta en marcha acelerada de R/3",
+      "indicador": "Cumplimiento del cronograma",
+      "meta": "Plazo recortado 90 días"
+    },
+    {
+      "perspectiva": "Procesos internos",
+      "objetivo": "Automatizar el almacén e integrarlo con R/3",
+      "iniciativaTI": "Software de automatización de almacén",
+      "indicador": "Transacciones diarias procesadas",
+      "meta": "~420,000 (volumen del mainframe)"
+    },
+    {
+      "perspectiva": "Aprendizaje y crecimiento",
+      "objetivo": "Retener y formar al personal en R/3",
+      "iniciativaTI": "Capacitación en R/3",
+      "indicador": "Rotación de personal",
+      "meta": "Sin meta en la fuente"
+    }
+  ],
+  "kpis": [
+    {
+      "indicador": "Costo del proyecto",
+      "meta": "US$65 M",
+      "frecuencia": "No documentada",
+      "responsable": "FoxMeyer Drug",
+      "fuente": "CACM (Scott & Vessey)",
+      "valorReal": "Más de US$100 M"
+    },
+    {
+      "indicador": "Ahorro anual",
+      "meta": "US$40–50 M",
+      "frecuencia": "No documentada",
+      "responsable": "FoxMeyer Drug",
+      "fuente": "CACM (Scott & Vessey)",
+      "valorReal": "Sin evidencia de que se lograra; quiebra en ago 1996"
+    },
+    {
+      "indicador": "Transacciones procesadas por día",
+      "meta": "~420,000 (nivel del mainframe)",
+      "frecuencia": "No documentada",
+      "responsable": "FoxMeyer Drug",
+      "fuente": "CACM (Scott & Vessey)",
+      "valorReal": "~10,000"
+    }
+  ],
+  "validacion": {
+    "resultadoReal": "Fracaso",
+    "fuente": "Scott & Vessey, «Managing Risks in Enterprise Systems Implementations», Communications of the ACM (https://cacm.acm.org/research/managing-risks-in-enterprise-systems-implementations). Otra fuente (CIO Australia) da un presupuesto de US$35 M y un costo real de ~US$70 M, afirmado por la propia empresa; las fuentes no coinciden.",
+    "notas": "Mismo resultado real que el caso de 1993. Calificaciones y riesgos basados solo en hechos documentados en la fuente; donde no hay evidencia, 3 (neutral). Los controles se dejan en 0% porque la fuente no describe ninguno. SUPUESTO: tasa de descuento 12% (valor por defecto de la plantilla; no está en la fuente)."
+  }
+}
