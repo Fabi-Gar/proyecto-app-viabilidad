@@ -43,16 +43,18 @@ function comprobar(p: Proyecto, e: Esperado, etq: string) {
   assert.equal(m.verdict.v, e.v, `${etq} dictamen`);
 }
 
-test("Caso A: ejemplo() sin cambios → Go condicionado", () => {
-  comprobar(ejemplo(), { van: 16796.17, tir: 21.88, bc: 1.078, pb: 3.07, total: 60.05, v: "cond" }, "A");
+test("Caso A: ejemplo() sin cambios → No Go (restaurante Centro)", () => {
+  comprobar(ejemplo(), { van: -139052.47, tir: -26.73, bc: 0.744, pb: null, total: 37.64, v: "nogo" }, "A");
 });
 
 test("Caso B: éxito claro → Go", () => {
   const p = ejemplo();
-  p.ben = p.ben.map((b) => ({ ...b, v: b.v * 2 }));
-  p.scores.mer = [4, 4, 4, 4, 4];
-  p.scores.cic = [4, 4, 4, 4, 4, 4];
-  comprobar(p, { van: 248972.65, tir: 98.51, bc: 2.156, pb: 1.059, total: 72.41, v: "go" }, "B");
+  p.ben = p.ben.map((b) => ({ ...b, v: b.v * 3 }));
+  (Object.keys(p.scores) as (keyof typeof p.scores)[]).forEach((k) => {
+    p.scores[k] = p.scores[k].map(() => 4);
+  });
+  p.riesgos = p.riesgos.map((r) => ({ ...r, p: 1, i: 1 }));
+  comprobar(p, { van: 668590.43, tir: 124.5, bc: 2.232, pb: 0.789, total: 84.4, v: "go" }, "B");
 });
 
 test("Caso C: fracaso → No Go (TIR y recuperación nulas)", () => {
@@ -61,14 +63,14 @@ test("Caso C: fracaso → No Go (TIR y recuperación nulas)", () => {
   p.scores.tec = [2, 2, 1, 2, 2, 2];
   p.scores.mer = [1, 2, 1, 1, 2];
   p.riesgos = p.riesgos.map((r, i) => (i < 4 ? { ...r, p: 5, i: 5, m: 0 } : r));
-  comprobar(p, { van: -122509.72, tir: null, bc: 0.431, pb: null, total: 21.08, v: "nogo" }, "C");
+  comprobar(p, { van: -381345.34, tir: null, bc: 0.298, pb: null, total: 20.71, v: "nogo" }, "C");
 });
 
 test("Caso E: borde (horizonte 3, beneficios ×0.9) → No Go", () => {
   const p = ejemplo();
   p.horizonte = 3;
   p.ben = p.ben.map((b) => ({ ...b, v: b.v * 0.9 }));
-  comprobar(p, { van: -39525.20, tir: -12.19, bc: 0.771, pb: null, total: 41.45, v: "nogo" }, "E");
+  comprobar(p, { van: -182086.62, tir: -75.11, bc: 0.571, pb: null, total: 37.38, v: "nogo" }, "E");
 });
 
 test("Plantilla en blanco → No Go", () => {

@@ -1,0 +1,164 @@
+{
+  "v": 1,
+  "nombre": "Programa de lealtad en Apple y Google Wallet · Restaurante, sucursal Centro",
+  "moneda": "Q",
+  "desc": "Tarjeta de sellos en Apple Wallet y Google Wallet para la sucursal Centro de un restaurante con 4 ubicaciones. Premio: un producto de Q100 al completar 12 compras de mínimo Q100. Desarrollo por 5 ingenieros en 5 meses (4 ene a 4 jun de 2027). Cifras de ventas reales del sistema del restaurante; la adopción, el aumento de pedidos y el margen son SUPUESTOS del equipo (no se pueden medir antes del piloto) y se muestran en tres escenarios.",
+  "horizonte": 5,
+  "tasa": 12,
+  "residual": 0,
+  "conting": 10,
+  "inv": [
+    { "n": "Desarrollo: 5 ingenieros × Q6,500 × 5 meses", "v": 162500 },
+    { "n": "Diseño de las tarjetas (sellos y regalo)", "v": 3500 },
+    { "n": "Capacitación del personal de Centro", "v": 3500 },
+    { "n": "Cuenta Apple Developer, primer año (US$100 × 7.70)", "v": 770 },
+    { "n": "Dominio, primer año (US$10 × 7.70)", "v": 77 }
+  ],
+  "ben": [
+    {
+      "n": "Margen de las ventas adicionales: 1,100 clientes adoptantes (30% de 3,665) × 2.0 pedidos extra al año × ticket Q101.84 × margen 50%",
+      "v": 112024,
+      "g": 0
+    }
+  ],
+  "cos": [
+    { "n": "Mantenimiento: 1 persona a tiempo parcial, servicios profesionales (Q3,500 × 12)", "v": 42000, "g": 0 },
+    { "n": "Servidor VPS (US$100 × 7.70)", "v": 770, "g": 0 },
+    { "n": "Renovación de Apple Developer (US$100 × 7.70)", "v": 770, "g": 0 },
+    { "n": "Renovación del dominio (US$10 × 7.70)", "v": 77, "g": 0 },
+    { "n": "Premios canjeados: 1,100 × 1 premio al año × costo variable de un producto de Q100 (Q50 = 100 × (1 − margen))", "v": 55000, "g": 0 }
+  ],
+  "mc": { "bmin": -50, "bmax": 60, "cmin": -10, "cmax": 30, "imin": -5, "imax": 30 },
+  "esc": {
+    "pes": { "b": 60, "c": 120, "i": 115 },
+    "opt": { "b": 170, "c": 70, "i": 100 }
+  },
+  "pesos": { "tec": 15, "ope": 10, "mer": 15, "fin": 25, "amb": 5, "est": 10, "rie": 15, "cic": 5 },
+  "umbralGo": 70,
+  "umbralCond": 55,
+  "foda": {
+    "f": "No exige instalar una app: la tarjeta vive en el wallet que el cliente ya usa\nDatos propios y recientes de ventas de Centro (3,665 clientes, 56,643 pedidos en 2025)\nCostos de plataforma bajos: Q1,617 al año entre servidor, Apple y dominio\nEl dueño es parte del proyecto y facilita el acceso a los datos",
+    "d": "Sin prototipo ni piloto todavía\nMargen de contribución y adopción sin medir\nEl umbral de 12 compras lo alcanza el cliente promedio sin comprar más\nDependencia de Apple y Google",
+    "o": "Recuperar la frecuencia de compra de Centro, que cayó de 16.2 a 13.8 pedidos por cliente\nPocos descuentos hoy (1.4% de las ventas): hay espacio para financiar premios\nAjustar el diseño del premio antes de lanzar (umbral, valor)\nAmpliar a las otras ubicaciones si el piloto resulta",
+    "a": "Que el costo de los premios supere el margen de las ventas adicionales\nCambios en políticas o APIs de Apple y Google\nBaja adopción de la tarjeta por parte de los clientes\nCaída de ventas de Centro (−2.4% en 2026) por razones ajenas al programa"
+  },
+  "scores": {
+    "tec": [3, 2, 1, 4, 3, 3],
+    "ope": [3, 4, 3, 4, 3, 2],
+    "mer": [3, 3, 2, 2, 3],
+    "amb": [4, 3, 3, 2, 2],
+    "est": [3, 3, 3, 4, 3],
+    "cic": [4, 3, 3, 3, 4, 3]
+  },
+  "notes": {
+    "tec": [
+      "Requerimientos RF/RNF definidos en la Fase 2 (emisión de pases, sellado por QR, canje, panel). Faltan los detalles de integración y seguridad, que se cierran en la fase 1 del plan (hito del 22 de enero de 2027).",
+      "Solo se contempla Apple Wallet y Google Wallet (APIs oficiales); no se comparó formalmente contra tarjeta física, app propia o un servicio de terceros.",
+      "Todavía no hay prototipo ni piloto. Es la brecha técnica principal; se cierra con el piloto en Centro (17 may a 4 jun de 2027).",
+      "Centro hizo 56,643 pedidos y tiene 3,665 clientes registrados en 2025 (~155 pedidos al día): volumen bajo para un servidor VPS. Sistema de ventas del restaurante, Dashboard de Centro, 1 ene 2025 a 1 ene 2026.",
+      "El equipo de caja de Centro ya existe, pero no se ha probado que corra la aplicación de sellos y lea el código QR; se prueba en la fase 1.",
+      "5 ingenieros asignados al desarrollo y 1 persona para el mantenimiento. No hay evidencia de experiencia previa con las APIs de Wallet."
+    ],
+    "ope": [
+      "El dueño del restaurante forma parte del proyecto. El personal de caja todavía no ha sido consultado.",
+      "Capacitación presupuestada (Q3,500) y programada en la fase 5, con 3 semanas junto al piloto.",
+      "El sellado agrega un paso en la caja (escanear el código del cliente). El resto del flujo de venta no cambia.",
+      "Mantenimiento presupuestado: 1 persona a tiempo parcial, Q3,500 al mes, desde la salida a producción.",
+      "Centro tiene ocupación del 100% y 18 minutos de atención promedio (Sistema de ventas del restaurante, Centro, filtro «Este año» 2026): el piloto debe ser controlado para no frenar la caja en horas pico.",
+      "No hay un procedimiento de respaldo y recuperación definido. Se define en la fase 3 del plan."
+    ],
+    "mer": [
+      "Dato propio, sin encuesta: los pedidos por cliente de Centro bajaron de 16.2 a 13.8 en 2026 y los pedidos cayeron 4.6% (Sistema de ventas del restaurante, Centro, filtro «Este año» 2026). Hay problema real de frecuencia, pero no se ha preguntado a los clientes.",
+      "3,665 clientes registrados y Q5.77 millones de ventas en 2025 en Centro (Sistema de ventas del restaurante, Dashboard de Centro, 1 ene 2025 a 1 ene 2026). La base es suficiente para un piloto, pero acotada para recuperar una inversión de Q187,382.",
+      "No se analizó a la competencia ni a otros programas de lealtad de la zona.",
+      "No se puede medir antes del piloto (no hay forma de encuestar). La adopción de 30% es el SUPUESTO del equipo; el cliente promedio ya hace casi 14 pedidos al año y alcanza el umbral de 12 compras sin cambiar su conducta.",
+      "Canal definido: invitar a agregar la tarjeta en caja con un código QR. Sin prueba de que funcione."
+    ],
+    "amb": [
+      "Solución digital: reemplaza tarjetas físicas y no requiere equipo nuevo, ya que Centro tiene su equipo de caja.",
+      "Sin análisis de ciclo de vida formal. No se compra hardware; el servidor es un VPS compartido.",
+      "Genera trabajo para 5 ingenieros y 1 persona de mantenimiento; efecto social acotado.",
+      "No se ha consultado a clientes ni al personal sobre privacidad, notificaciones o uso de datos.",
+      "Falta revisar el tratamiento de datos personales de los clientes y las condiciones de Apple y Google."
+    ],
+    "est": [
+      "Ver FODA: fortalezas reales (sin app que instalar, datos propios de ventas) y debilidades (sin prototipo, sin margen calculado).",
+      "Oportunidad de recuperar frecuencia con costos bajos de plataforma; amenaza de un costo de premios mayor al beneficio.",
+      "Ver PESTEL: entorno neutro y favorable, con evidencia de dispositivos (Android 74.86%, iOS 25.13%, StatCounter oct 2026).",
+      "Se alinea con el objetivo de recuperar las ventas de Centro (−2.4% en 2026) y la frecuencia de compra (ver BSC).",
+      "El restaurante no tiene un mapa estratégico de TI formal; el proyecto encaja en su digitalización, pero eso no está documentado."
+    ],
+    "cic": [
+      "Fase 1 (definición y riesgos) completada.",
+      "Fase 2 (plan de trabajo, cronograma, recursos y presupuesto) completada con costos confirmados por el equipo.",
+      "Se usaron datos reales de ventas de Centro, pero faltan el margen real y la adopción; son escenarios.",
+      "Seguimiento con KPI, responsables, frecuencia y fuente definidos (ver KPIs).",
+      "Los KPI tienen meta; las del programa se calculan con los supuestos base (1,100 tarjetas activas).",
+      "Evaluación ex-post prevista con el piloto y a los 6 y 12 meses, comparando contra estos supuestos."
+    ]
+  },
+  "riesgos": [
+    { "n": "Baja adopción: pocos clientes agregan la tarjeta a su wallet", "t": "Mercado", "p": 4, "i": 4, "m": 25 },
+    { "n": "Clientes que ya compraban 14 veces al año cobran premio sin comprar más (el programa deja pérdida)", "t": "Financiero", "p": 4, "i": 4, "m": 25 },
+    { "n": "Costos de desarrollo por encima de lo estimado o retraso en las fases", "t": "Financiero", "p": 3, "i": 3, "m": 25 },
+    { "n": "Retraso en la aprobación de la cuenta Apple Developer o del acceso a Google Wallet API", "t": "Tecnológico", "p": 3, "i": 3, "m": 50 },
+    { "n": "Cambios en políticas o APIs de Apple y Google", "t": "Tecnológico", "p": 3, "i": 3, "m": 25 },
+    { "n": "El equipo de caja actual de Centro no ejecuta la aplicación de sellos", "t": "Operativo", "p": 2, "i": 3, "m": 50 },
+    { "n": "Personal de caja registra mal los sellos o hay uso indebido de los sellos", "t": "Operativo", "p": 3, "i": 3, "m": 50 },
+    { "n": "Un ingeniero deja el equipo durante el desarrollo", "t": "Organizacional", "p": 2, "i": 4, "m": 50 },
+    { "n": "Tratamiento de datos personales de clientes sin revisión legal", "t": "Legal", "p": 2, "i": 3, "m": 50 },
+    { "n": "Caída del servidor VPS sin plan de respaldo", "t": "Seguridad", "p": 2, "i": 3, "m": 50 }
+  ],
+  "requerimientos": [
+    { "id": "RF-01", "texto": "Emitir tarjetas de sellos y de regalo para Apple Wallet y Google Wallet", "tipo": "Funcional", "prioridad": "Alta" },
+    { "id": "RF-02", "texto": "Registrar un sello al escanear el código del cliente en caja, si la compra es de Q100 o más", "tipo": "Funcional", "prioridad": "Alta" },
+    { "id": "RF-03", "texto": "Entregar el premio (un producto de Q100) y reiniciar la tarjeta al completar 12 sellos", "tipo": "Funcional", "prioridad": "Alta" },
+    { "id": "RF-04", "texto": "Panel de administración con tarjetas activas, sellos y premios canjeados", "tipo": "Funcional", "prioridad": "Media" },
+    { "id": "RF-05", "texto": "Actualizar la tarjeta en el teléfono del cliente después de cada sello", "tipo": "Funcional", "prioridad": "Media" },
+    { "id": "RNF-01", "texto": "Funcionar en el equipo de caja actual de Centro sin comprar equipo nuevo", "tipo": "No funcional", "prioridad": "Alta" },
+    { "id": "RNF-02", "texto": "Soportar al menos el volumen actual de Centro (~155 pedidos al día) sin demoras visibles en caja", "tipo": "No funcional", "prioridad": "Alta" },
+    { "id": "RNF-03", "texto": "Proteger los datos personales de los clientes y respaldar la base de datos", "tipo": "No funcional", "prioridad": "Alta" },
+    { "id": "RNF-04", "texto": "Funcionar en iPhone y Android (Android 74.86% e iOS 25.13% en Guatemala, StatCounter oct 2026)", "tipo": "No funcional", "prioridad": "Alta" }
+  ],
+  "cicloVida": [
+    { "fase": "Perfil", "estado": "Completada", "nota": "Fase 1: problema, objetivo, alcance y riesgos definidos." },
+    { "fase": "Prefactibilidad", "estado": "Completada", "nota": "Fase 2: plan de trabajo, cronograma, recursos y presupuesto con costos confirmados." },
+    { "fase": "Factibilidad", "estado": "En progreso", "nota": "Fase 3: datos reales de ventas de Centro cargados. Faltan margen real y adopción (se miden en el piloto)." },
+    { "fase": "Monitoreo", "estado": "Pendiente", "nota": "KPI definidos; se activan con la salida a producción (4 jun 2027)." },
+    { "fase": "Evaluación ex-post", "estado": "Pendiente", "nota": "Comparar a los 6 y 12 meses la adopción, los pedidos extra y el costo de premios contra los supuestos." }
+  ],
+  "cronograma": [
+    { "fase": "1. Inicio y requerimientos", "inicio": "2027-01-04", "fin": "2027-01-22", "responsable": "Equipo de desarrollo y dueño" },
+    { "fase": "2. Diseño técnico y de tarjetas", "inicio": "2027-01-25", "fin": "2027-02-19", "responsable": "Equipo de desarrollo y diseño" },
+    { "fase": "3. Desarrollo", "inicio": "2027-02-22", "fin": "2027-04-16", "responsable": "Equipo de desarrollo" },
+    { "fase": "4. Integración y pruebas", "inicio": "2027-04-19", "fin": "2027-05-14", "responsable": "Equipo de desarrollo" },
+    { "fase": "5. Capacitación y piloto en Centro", "inicio": "2027-05-17", "fin": "2027-06-04", "responsable": "Equipo, dueño y personal de Centro" }
+  ],
+  "pestel": [
+    { "tipo": "Político", "efecto": "Neutro", "descripcion": "Sin incentivos ni barreras específicas para tarjetas de lealtad digitales.", "nota": "Sin evidencia en las fuentes consultadas." },
+    { "tipo": "Económico", "efecto": "Desfavorable", "descripcion": "Las ventas de Centro bajaron 2.4% y los pedidos 4.6% en 2026 frente al periodo anterior.", "nota": "Sistema de ventas del restaurante, Centro, filtro «Este año» 2026" },
+    { "tipo": "Social", "efecto": "Neutro", "descripcion": "El cliente promedio de Centro hace casi 14 pedidos al año; hay hábito de visita.", "nota": "Sistema de ventas del restaurante, Dashboard de Centro, 1 ene 2025 a 1 ene 2026" },
+    { "tipo": "Tecnológico", "efecto": "Favorable", "descripcion": "Android 74.86% e iOS 25.13% de los celulares en Guatemala; ambos wallets están disponibles.", "nota": "StatCounter, Guatemala, octubre de 2026 (mide visitas web)." },
+    { "tipo": "Ambiental", "efecto": "Favorable", "descripcion": "Reemplaza tarjetas físicas por una solución digital, sin hardware nuevo.", "nota": "Estimación cualitativa del equipo." },
+    { "tipo": "Legal", "efecto": "Neutro", "descripcion": "Tratamiento de datos personales de clientes y términos de Apple y Google.", "nota": "Pendiente de revisión legal." }
+  ],
+  "bsc": [
+    { "perspectiva": "Financiera", "objetivo": "Recuperar las ventas de Centro y cubrir el costo del programa", "iniciativaTI": "Tarjeta de sellos y panel de administración", "indicador": "Margen de ventas adicionales menos costo de premios", "meta": "≥ Q57,024 al año" },
+    { "perspectiva": "Clientes", "objetivo": "Aumentar la frecuencia de compra de los clientes inscritos", "iniciativaTI": "Tarjeta de sellos en Apple y Google Wallet", "indicador": "Pedidos extra por cliente adoptante", "meta": "≥ 2 al año" },
+    { "perspectiva": "Procesos internos", "objetivo": "Sellar y canjear premios en caja sin demorar la venta", "iniciativaTI": "Sellado por código QR en el equipo de caja actual", "indicador": "Tiempo agregado por venta", "meta": "≤ 10 segundos" },
+    { "perspectiva": "Aprendizaje y crecimiento", "objetivo": "Contar con datos propios de clientes para decidir campañas", "iniciativaTI": "Panel de administración con datos de sellos y canjes", "indicador": "Reportes mensuales revisados por el dueño", "meta": "12 al año" }
+  ],
+  "kpis": [
+    { "indicador": "Tarjetas activas en el wallet", "meta": "≥ 1,100 en el año 1 (30% de 3,665 clientes)", "frecuencia": "Mensual", "responsable": "Dueño", "fuente": "Panel de administración" },
+    { "indicador": "Pedidos por cliente adoptante", "meta": "+2 pedidos al año frente a su promedio anterior", "frecuencia": "Trimestral", "responsable": "Dueño", "fuente": "Sistema de ventas + panel" },
+    { "indicador": "Premios canjeados", "meta": "≤ 92 al mes", "frecuencia": "Mensual", "responsable": "Gerente de Centro", "fuente": "Panel de administración" },
+    { "indicador": "Ventas de Centro", "meta": "Revertir la caída de 2.4% en 2026", "frecuencia": "Mensual", "responsable": "Dueño", "fuente": "Sistema de ventas" },
+    { "indicador": "Costo de premios sobre ventas de Centro", "meta": "≤ 1% de las ventas", "frecuencia": "Trimestral", "responsable": "Dueño", "fuente": "Sistema de ventas + panel" },
+    { "indicador": "Disponibilidad del servicio", "meta": "≥ 99% mensual", "frecuencia": "Mensual", "responsable": "Responsable de mantenimiento", "fuente": "Monitoreo del servidor" }
+  ],
+  "validacion": {
+    "resultadoReal": "Sin dato",
+    "fuente": "Capturas del sistema de ventas del restaurante (Dashboard por ubicación, 1 ene 2025 a 1 ene 2026; Centro «Este año» 2026) y presupuesto del equipo (Fase 2).",
+    "notas": "Proyecto propio del equipo, aún sin implementación: no hay resultado real con el cual comparar, así que no cuenta como caso de validación. Supuestos del equipo: tasa 12% y horizonte de 5 años; adopción de 30% (decisión del equipo), pedidos extra y margen (ver descripción)."
+  }
+}

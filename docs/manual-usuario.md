@@ -16,7 +16,7 @@ PDF**.
 
 [CAPTURA: barra superior con puntaje, dictamen y botones]
 
-La app arranca con un **ejemplo** (programa de lealtad). Para evaluar tu propio
+La app arranca con un **ejemplo** (programa de lealtad de la sucursal Centro de un restaurante, que da No Go). Para evaluar tu propio
 proyecto, ve a la pestaña **Proyecto** y pulsa **«Empezar un proyecto en
 blanco»**.
 

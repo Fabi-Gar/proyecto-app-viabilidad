@@ -6,7 +6,7 @@
  * nuevos para el informe: requerimientos, ciclo de vida y cronograma.
  *
  * La app es GENÉRICA: estos tipos sirven para cualquier proyecto
- * (ERP, CRM, app, etc.). El ejemplo de tarjetas de lealtad es solo un
+ * (ERP, CRM, app, etc.). El ejemplo del restaurante (lealtad en wallets) es solo un
  * dato de arranque (ver lib/ejemplos.ts), no está amarrado a la lógica.
  */
 

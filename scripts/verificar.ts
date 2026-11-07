@@ -1,7 +1,7 @@
 /**
- * Verificación del motor con el ejemplo de tarjetas de lealtad.
- * Esperado: VAN ≈ Q 16,796, TIR ≈ 21.9%, recuperación ≈ 3.1 años,
- * dictamen "Go condicionado" (cond) con 60/100.
+ * Verificación del motor con el ejemplo del restaurante (sucursal Centro).
+ * Esperado: VAN ≈ −Q 139,052, TIR ≈ −26.7%, sin recuperación,
+ * dictamen "No Go" (nogo) con 38/100.
  *
  * Correr: npx tsx scripts/verificar.ts
  */
@@ -20,11 +20,11 @@ console.log("Dictamen:     ", v);
 console.log("Prob VAN>0:   ", pct(m.mcr.p, 0));
 
 const ok =
-  Math.round(m.f.van) === 16796 &&
-  Math.abs((m.f.tir ?? 0) * 100 - 21.9) < 0.1 &&
-  Math.abs((m.f.pb ?? 0) - 3.1) < 0.1 &&
-  Math.round(m.total) === 60 &&
-  m.verdict.v === "cond";
+  Math.round(m.f.van) === -139052 &&
+  Math.abs((m.f.tir ?? 0) * 100 - -26.7) < 0.1 &&
+  m.f.pb == null &&
+  Math.round(m.total) === 38 &&
+  m.verdict.v === "nogo";
 
 console.log("\n" + (ok ? "✓ COINCIDE con lo esperado" : "✗ NO coincide"));
 process.exit(ok ? 0 : 1);

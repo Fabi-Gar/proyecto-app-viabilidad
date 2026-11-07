@@ -16,9 +16,9 @@ Convenciones:
 - `m = { b, c, i }` = multiplicadores de escenario sobre beneficios, costos e
   inversión (1 = base).
 
-Cifras de referencia del ejemplo: **VAN Q 16,796.17**, **TIR 21.88 %**,
-**B/C 1.078**, **recuperación 3.07 años**, **puntaje 60.05/100**,
-dictamen **Go condicionado**.
+Cifras de referencia del ejemplo: **VAN −Q 139,052.47**, **TIR −26.73 %**,
+**B/C 0.744**, **recuperación: no se recupera**, **puntaje 37.64/100**,
+dictamen **No Go** (caso del restaurante, sucursal Centro).
 
 ---
 
@@ -70,7 +70,7 @@ pvB = Σ benT[t] / (1 + r)^t
 pvC = Σ cosT[t] / (1 + r)^t
 ```
 
-VAN > 0 crea valor; VAN ≤ 0 lo destruye. Ejemplo: **Q 16,796.17**.
+VAN > 0 crea valor; VAN ≤ 0 lo destruye. Ejemplo: **−Q 139,052.47**.
 
 ## 3. Tasa Interna de Retorno (TIR)
 
@@ -82,7 +82,7 @@ f(r) = Σ net[t] / (1 + r)^t
 
 en el intervalo `[−0.95, 10]`, con 120 iteraciones. Si `f(−0.95)` y `f(10)`
 tienen el mismo signo (no hay cruce por cero), la TIR **no existe** y se
-devuelve `null` (por ejemplo, un flujo siempre negativo). Ejemplo: **21.88 %**.
+devuelve `null` (por ejemplo, un flujo siempre negativo). Ejemplo: **−26.73 %**.
 
 ## 4. Relación beneficio/costo (B/C)
 
@@ -106,8 +106,7 @@ recuperación = (t − 1) + (−acum_previo) / flujo_del_año
 - **Simple**: con `rate = 0` (flujos sin descontar).
 - **Descontada**: con `rate = r` (flujos descontados).
 
-Si nunca se recupera dentro del horizonte, es `null`. Ejemplo simple: **3.07
-años**.
+Si nunca se recupera dentro del horizonte, es `null`. En el ejemplo del restaurante no se recupera dentro del horizonte (`null`).
 
 ## 6. Sensibilidad
 

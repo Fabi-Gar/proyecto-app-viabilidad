@@ -41,8 +41,8 @@ el bloque **«Datos de validación del caso»**:
 
 ## Archivos
 
-- `ejemplo-tarjetas-lealtad.json` — caso de ejemplo (programa de lealtad en
-  Apple/Google Wallet). Es el proyecto de demostración de la app; su resultado
-  real está marcado como *Sin dato* porque aún no se ha implementado.
+- `restaurante-centro-lealtad.json` — ejemplo de la app (`ejemplo()`): programa de
+  lealtad en Apple/Google Wallet para la sucursal Centro de un restaurante, con
+  ventas reales y supuestos del equipo. Resultado real: *Sin dato*. Dictamen: No Go.
 
 Agrega aquí los `.json` reales de cada caso de validación del equipo.

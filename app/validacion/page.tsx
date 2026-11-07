@@ -96,7 +96,7 @@ export default function ValidacionPage() {
   }
 
   function cargarEjemplo() {
-    setCasos((prev) => [...prev, { p: ejemplo(), archivo: "ejemplo-tarjetas-lealtad.json" }]);
+    setCasos((prev) => [...prev, { p: ejemplo(), archivo: "restaurante-centro-lealtad.json" }]);
     setMsg("Caso de ejemplo agregado.");
   }
 

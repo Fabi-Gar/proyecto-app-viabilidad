@@ -220,7 +220,7 @@ export function PanelProyecto() {
         </div>
         <div className="row">
           <button className="btn" onClick={() => reemplazar(ejemplo())}>
-            Cargar ejemplo de tarjetas de lealtad
+            Cargar ejemplo del restaurante (lealtad)
           </button>
           <button className="btn" onClick={() => reemplazar(plantillaEnBlanco())}>
             Empezar un proyecto en blanco
