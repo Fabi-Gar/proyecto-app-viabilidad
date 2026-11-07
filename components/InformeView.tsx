@@ -8,10 +8,18 @@
 import { useState } from "react";
 import { Radar } from "./Graficas";
 import { MapaCalor } from "./MapaCalor";
+import { MapaEstrategico } from "./MapaEstrategico";
 import { DIMS, lvlOf, LVN, money, pct, yrs, fmt } from "@/lib/calculo";
+import { PERSPECTIVAS_BSC } from "@/lib/esquema";
 import { slug } from "@/lib/compartir";
-import type { Proyecto } from "@/lib/tipos";
+import type { Proyecto, EfectoPestel } from "@/lib/tipos";
 import type { Model } from "@/lib/calculo";
+
+const EFECTO_CLS: Record<EfectoPestel, string> = {
+  Favorable: "ok",
+  Neutro: "wn",
+  Desfavorable: "ko",
+};
 
 const PILL: Record<string, string> = { go: "GO", cond: "GO CONDICIONADO", nogo: "NO GO" };
 const MSG: Record<string, string> = {
@@ -86,6 +94,14 @@ export function InformeView({ p, m }: { p: Proyecto; m: Model }) {
           <p>{MSG[v]} Puntaje global {fmt(m.total, 0)} de 100.</p>
         </div>
 
+        {(p.validacion.resultadoReal !== "Sin dato" || p.validacion.fuente.trim() || p.validacion.notas.trim()) && (
+          <p className="hint" style={{ marginTop: -8 }}>
+            <b>Validación del caso:</b> resultado real {p.validacion.resultadoReal}
+            {p.validacion.fuente.trim() ? ` · fuente: ${p.validacion.fuente}` : ""}
+            {p.validacion.notas.trim() ? ` · ${p.validacion.notas}` : ""}
+          </p>
+        )}
+
         <section>
           <div className="phead"><h2>Documentación y resumen</h2></div>
           <p className="muted" style={{ marginTop: 10 }}>{p.desc || "Sin descripción."}</p>
@@ -129,6 +145,29 @@ export function InformeView({ p, m }: { p: Proyecto; m: Model }) {
               </div>
             )}
           </div>
+          {p.kpis.length > 0 && (
+            <div className="card" style={{ marginTop: 12 }}>
+              <h3>Plan de monitoreo e indicadores (KPIs)</h3>
+              <p className="hint">El valor real se compara contra la meta en la evaluación ex-post.</p>
+              <div className="tw">
+                <table>
+                  <thead><tr><th className="l">Indicador</th><th className="l">Meta</th><th className="l">Frecuencia</th><th className="l">Responsable</th><th className="l">Fuente</th><th className="l">Valor real</th></tr></thead>
+                  <tbody>
+                    {p.kpis.map((k, i) => (
+                      <tr key={i}>
+                        <td className="l">{k.indicador || "—"}</td>
+                        <td className="l">{k.meta || "—"}</td>
+                        <td className="l">{k.frecuencia || "—"}</td>
+                        <td className="l">{k.responsable || "—"}</td>
+                        <td className="l">{k.fuente || "—"}</td>
+                        <td className="l">{k.valorReal?.trim() ? k.valorReal : "Sin medir"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </section>
 
         <section>
@@ -169,6 +208,59 @@ export function InformeView({ p, m }: { p: Proyecto; m: Model }) {
             <div className="card"><Radar sc={m.sc} /></div>
           </div>
         </section>
+
+        {(p.pestel.length > 0 || p.bsc.length > 0) && (
+          <section>
+            <div className="phead"><h2>Análisis estratégico</h2></div>
+
+            {p.pestel.length > 0 && (
+              <div className="card" style={{ marginTop: 12 }}>
+                <h3>PESTEL</h3>
+                <div className="tw">
+                  <table>
+                    <thead><tr><th className="l">Tipo</th><th className="l">Descripción</th><th className="l">Efecto</th><th className="l">Nota / evidencia</th></tr></thead>
+                    <tbody>
+                      {p.pestel.map((fa, i) => (
+                        <tr key={i}>
+                          <td className="l">{fa.tipo}</td>
+                          <td className="l">{fa.descripcion || "—"}</td>
+                          <td className="l"><b className={EFECTO_CLS[fa.efecto]}>{fa.efecto}</b></td>
+                          <td className="l">{fa.nota || "—"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {p.bsc.length > 0 && (
+              <div className="card" style={{ marginTop: 12 }}>
+                <h3>Balanced Scorecard</h3>
+                <div className="tw">
+                  <table>
+                    <thead><tr><th className="l">Perspectiva</th><th className="l">Objetivo</th><th className="l">Iniciativa de TI</th><th className="l">Indicador</th><th className="l">Meta</th></tr></thead>
+                    <tbody>
+                      {PERSPECTIVAS_BSC.flatMap((persp) =>
+                        p.bsc.filter((o) => o.perspectiva === persp).map((o, j) => (
+                          <tr key={persp + j}>
+                            <td className="l">{o.perspectiva}</td>
+                            <td className="l">{o.objetivo || "—"}</td>
+                            <td className="l">{o.iniciativaTI || "—"}</td>
+                            <td className="l">{o.indicador || "—"}</td>
+                            <td className="l">{o.meta || "—"}</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+                <h3 style={{ marginTop: 6 }}>Mapa estratégico de TI</h3>
+                <MapaEstrategico bsc={p.bsc} />
+              </div>
+            )}
+          </section>
+        )}
 
         <section>
           <div className="phead"><h2>Análisis financiero</h2></div>

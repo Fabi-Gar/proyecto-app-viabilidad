@@ -94,8 +94,9 @@ export function InformeEmail({
             <Hr style={{ borderColor: LINE, margin: "16px 0" }} />
             <Text style={{ margin: 0, fontSize: 14, color: INK, lineHeight: 1.5 }}>
               Se adjunta el <strong>informe completo en PDF</strong> con todas las secciones:
-              documentación, requerimientos, ciclo de vida, cronograma, evaluación por enfoque,
-              análisis financiero, mapa de riesgos y dictamen.
+              documentación, requerimientos, ciclo de vida y monitoreo (KPIs), cronograma,
+              evaluación por enfoque, análisis estratégico (FODA, PESTEL, BSC y mapa
+              estratégico), análisis financiero, mapa de riesgos y dictamen.
             </Text>
             {urlInforme && (
               <Text style={{ margin: "12px 0 0", fontSize: 14 }}>

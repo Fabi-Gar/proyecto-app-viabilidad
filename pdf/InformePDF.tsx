@@ -36,7 +36,8 @@ import {
   vanFrom,
   type Model,
 } from "@/lib/calculo";
-import type { Proyecto, DimKey, DimScoreKey } from "@/lib/tipos";
+import { PERSPECTIVAS_BSC } from "@/lib/esquema";
+import type { Proyecto, DimKey, DimScoreKey, EfectoPestel, ObjetivoBSC } from "@/lib/tipos";
 
 /* ------------------------------- Paleta ---------------------------------- */
 const C = {
@@ -59,6 +60,8 @@ const LVL_FG: Record<string, string> = { b: "#1e6b4f", m: "#8a6a1e", a: "#9a4826
 const VERD_BG: Record<string, string> = { go: C.goodBg, cond: C.warnBg, nogo: C.badBg };
 const VERD_FG: Record<string, string> = { go: C.good, cond: C.warn, nogo: C.bad };
 const VERD_TXT: Record<string, string> = { go: "GO", cond: "GO CONDICIONADO", nogo: "NO GO" };
+const EFECTO_BG: Record<EfectoPestel, string> = { Favorable: C.goodBg, Neutro: C.warnBg, Desfavorable: C.badBg };
+const EFECTO_FG: Record<EfectoPestel, string> = { Favorable: C.good, Neutro: C.warn, Desfavorable: C.bad };
 
 /** Reemplaza glifos que Helvetica no tiene. */
 const fix = (s: string): string =>
@@ -236,6 +239,50 @@ function TornadoPDF({ items, base }: { items: TorItem[]; base: number }) {
   );
 }
 
+/* --------------------- Mapa estratégico de TI (View) --------------------- */
+function MapaEstrategicoPDF({ bsc }: { bsc: ObjetivoBSC[] }) {
+  const bandas = PERSPECTIVAS_BSC.map((persp) => ({
+    persp,
+    objs: bsc.filter((o) => o.perspectiva === persp && (o.objetivo.trim() || o.iniciativaTI.trim())),
+  }));
+  return (
+    <View>
+      {bandas.map((b, i) => (
+        <Fragment key={b.persp}>
+          <View style={{ flexDirection: "row", borderWidth: 1, borderColor: C.line, marginBottom: 2 }} wrap={false}>
+            <View style={{ width: 92, backgroundColor: C.navy, padding: 5, justifyContent: "center" }}>
+              <Text style={{ fontSize: 7, color: "#ffffff", fontFamily: "Helvetica-Bold", textTransform: "uppercase", letterSpacing: 0.2 }}>
+                {b.persp}
+              </Text>
+            </View>
+            <View style={{ flex: 1, flexDirection: "row", flexWrap: "wrap", padding: 3 }}>
+              {b.objs.length === 0 ? (
+                <Text style={{ fontSize: 7.5, color: C.muted, padding: 3 }}>(Sin objetivos)</Text>
+              ) : (
+                b.objs.map((o, j) => (
+                  <View key={j} style={{ backgroundColor: "#dbe6f3", borderWidth: 1, borderColor: C.line, borderLeftWidth: 2.5, borderLeftColor: C.accent, borderRadius: 2, padding: 5, margin: 3, width: "46%" }}>
+                    <Text style={{ fontSize: 8, fontFamily: "Helvetica-Bold", color: C.ink }}>{fix(o.objetivo || "(sin objetivo)")}</Text>
+                    {o.iniciativaTI.trim() ? (
+                      <Text style={{ fontSize: 7, color: C.muted, marginTop: 2 }}>TI: {fix(o.iniciativaTI)}</Text>
+                    ) : null}
+                  </View>
+                ))
+              )}
+            </View>
+          </View>
+          {i < bandas.length - 1 && (
+            <View style={{ alignItems: "center", marginBottom: 2 }}>
+              <Svg width={16} height={8} viewBox="0 0 16 8">
+                <Polygon points="8,0 14,8 2,8" fill={C.accent} />
+              </Svg>
+            </View>
+          )}
+        </Fragment>
+      ))}
+    </View>
+  );
+}
+
 /* ================================ Documento ============================== */
 export function InformePDF({ p, m, autores }: { p: Proyecto; m: Model; autores?: string }) {
   const mon = p.moneda;
@@ -276,6 +323,12 @@ export function InformePDF({ p, m, autores }: { p: Proyecto; m: Model; autores?:
     { n: "Optimista", mul: p.esc.opt, r: m.opt },
   ];
 
+  // Datos de validación del caso (solo se muestran si hay algo).
+  const hayValidacion =
+    p.validacion.resultadoReal !== "Sin dato" ||
+    p.validacion.fuente.trim() !== "" ||
+    p.validacion.notas.trim() !== "";
+
   return (
     <Document title={`Informe de viabilidad: ${p.nombre}`} author="Viabilidad 360">
       <Page size="A4" style={styles.page}>
@@ -299,6 +352,14 @@ export function InformePDF({ p, m, autores }: { p: Proyecto; m: Model; autores?:
         <View style={styles.section} wrap={false}>
           <Text style={styles.h2}>Documentación y resumen</Text>
           <Text style={styles.p}>{p.desc || "Sin descripción."}</Text>
+          {hayValidacion && (
+            <Text style={[styles.p, styles.muted, { marginTop: 4 }]}>
+              <Text style={{ fontFamily: "Helvetica-Bold" }}>Validación del caso: </Text>
+              resultado real {p.validacion.resultadoReal}
+              {p.validacion.fuente.trim() ? ` · fuente: ${fix(p.validacion.fuente)}` : ""}
+              {p.validacion.notas.trim() ? ` · ${fix(p.validacion.notas)}` : ""}
+            </Text>
+          )}
         </View>
 
         {/* 3. Requerimientos */}
@@ -346,6 +407,38 @@ export function InformePDF({ p, m, autores }: { p: Proyecto; m: Model; autores?:
                 </View>
               ))}
             </View>
+          )}
+          {p.kpis.length > 0 && (
+            <>
+              <Text style={[styles.p, { marginTop: 10, fontFamily: "Helvetica-Bold" }]}>
+                Plan de monitoreo e indicadores (KPIs)
+              </Text>
+              <Text style={[styles.p, styles.muted]}>
+                El valor real se compara contra la meta en la evaluación ex-post.
+              </Text>
+              <View style={styles.table}>
+                <View style={styles.tr}>
+                  <HCell w="28%">Indicador</HCell>
+                  <HCell w="15%">Meta</HCell>
+                  <HCell w="14%">Frecuencia</HCell>
+                  <HCell w="16%">Responsable</HCell>
+                  <HCell w="15%">Fuente</HCell>
+                  <HCell w="12%">Valor real</HCell>
+                </View>
+                {p.kpis.map((k, i) => (
+                  <View key={i} style={i === p.kpis.length - 1 ? styles.trLast : styles.tr} wrap={false}>
+                    <Cell w="28%">{fix(k.indicador || "-")}</Cell>
+                    <Cell w="15%">{fix(k.meta || "-")}</Cell>
+                    <Cell w="14%">{fix(k.frecuencia || "-")}</Cell>
+                    <Cell w="16%">{fix(k.responsable || "-")}</Cell>
+                    <Cell w="15%">{fix(k.fuente || "-")}</Cell>
+                    <Cell w="12%" color={k.valorReal?.trim() ? C.ink : C.muted}>
+                      {fix(k.valorReal?.trim() ? k.valorReal : "Sin medir")}
+                    </Cell>
+                  </View>
+                ))}
+              </View>
+            </>
           )}
         </View>
 
@@ -453,6 +546,66 @@ export function InformePDF({ p, m, autores }: { p: Proyecto; m: Model; autores?:
             </View>
           </View>
         </View>
+
+        {/* 6d. Análisis estratégico: PESTEL, BSC y mapa estratégico */}
+        {(p.pestel.length > 0 || p.bsc.length > 0) && (
+          <View style={styles.section}>
+            <Text style={styles.h2}>Análisis estratégico</Text>
+
+            {p.pestel.length > 0 && (
+              <>
+                <Text style={[styles.p, { fontFamily: "Helvetica-Bold" }]}>PESTEL</Text>
+                <View style={styles.table}>
+                  <View style={styles.tr}>
+                    <HCell w="16%">Tipo</HCell>
+                    <HCell w="38%">Descripción</HCell>
+                    <HCell w="16%">Efecto</HCell>
+                    <HCell w="30%">Nota / evidencia</HCell>
+                  </View>
+                  {p.pestel.map((fa, i) => (
+                    <View key={i} style={i === p.pestel.length - 1 ? styles.trLast : styles.tr} wrap={false}>
+                      <Cell w="16%">{fa.tipo}</Cell>
+                      <Cell w="38%">{fix(fa.descripcion || "-")}</Cell>
+                      <Cell w="16%" bg={EFECTO_BG[fa.efecto]} color={EFECTO_FG[fa.efecto]} bold>{fa.efecto}</Cell>
+                      <Cell w="30%" color={C.muted}>{fix(fa.nota || "-")}</Cell>
+                    </View>
+                  ))}
+                </View>
+              </>
+            )}
+
+            {p.bsc.length > 0 && (
+              <>
+                <Text style={[styles.p, { marginTop: 10, fontFamily: "Helvetica-Bold" }]}>Balanced Scorecard</Text>
+                <View style={styles.table}>
+                  <View style={styles.tr}>
+                    <HCell w="20%">Perspectiva</HCell>
+                    <HCell w="26%">Objetivo</HCell>
+                    <HCell w="26%">Iniciativa de TI</HCell>
+                    <HCell w="16%">Indicador</HCell>
+                    <HCell w="12%">Meta</HCell>
+                  </View>
+                  {PERSPECTIVAS_BSC.flatMap((persp) =>
+                    p.bsc.filter((o) => o.perspectiva === persp)
+                  ).map((o, i, arrBsc) => (
+                    <View key={i} style={i === arrBsc.length - 1 ? styles.trLast : styles.tr} wrap={false}>
+                      <Cell w="20%">{o.perspectiva}</Cell>
+                      <Cell w="26%">{fix(o.objetivo || "-")}</Cell>
+                      <Cell w="26%">{fix(o.iniciativaTI || "-")}</Cell>
+                      <Cell w="16%">{fix(o.indicador || "-")}</Cell>
+                      <Cell w="12%">{fix(o.meta || "-")}</Cell>
+                    </View>
+                  ))}
+                </View>
+
+                <Text style={[styles.p, { marginTop: 10, fontFamily: "Helvetica-Bold" }]}>Mapa estratégico de TI</Text>
+                <View wrap={false}>
+                  <MapaEstrategicoPDF bsc={p.bsc} />
+                </View>
+              </>
+            )}
+          </View>
+        )}
 
         {/* 7. Análisis financiero */}
         <View style={styles.section}>
