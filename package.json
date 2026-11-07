@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "tsx --test tests/motor.test.ts",
+    "verificar": "tsx scripts/verificar.ts"
   },
   "dependencies": {
     "@react-email/components": "^1.0.12",
@@ -19,6 +21,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "tsx": "^4.19.2",
     "typescript": "^5"
   }
 }
