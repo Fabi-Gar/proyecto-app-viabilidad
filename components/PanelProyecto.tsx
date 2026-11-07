@@ -2,12 +2,13 @@
 
 /** Pestaña Proyecto: datos generales, cómo se decide, validación de campos y
  *  botones para cargar el ejemplo, empezar en blanco e importar/copiar JSON. */
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useProy } from "./contexto";
 import { TextInput, Select } from "./campos";
 import { ejemplo, plantillaEnBlanco } from "@/lib/ejemplos";
 import { validar } from "@/lib/validacion";
 import { parsearProyecto } from "@/lib/esquema";
+import { slug } from "@/lib/compartir";
 import type { ResultadoValidacion } from "@/lib/tipos";
 
 const RESULTADO_OPTS: [ResultadoValidacion, string][] = [
@@ -20,8 +21,44 @@ export function PanelProyecto() {
   const { p, mut, reemplazar } = useProy();
   const [io, setIo] = useState("");
   const [msg, setMsg] = useState("");
+  const inputArchivo = useRef<HTMLInputElement>(null);
   const avisos = validar(p);
   const esEjemplo = /Cifras de ejemplo/.test(p.desc);
+
+  function descargarJSON() {
+    try {
+      const blob = new Blob([JSON.stringify(p, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `proyecto-${slug(p.nombre)}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      setMsg("Proyecto descargado como archivo .json.");
+    } catch {
+      setMsg("No se pudo descargar el archivo.");
+    }
+  }
+
+  async function onArchivo(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // permite volver a cargar el mismo archivo
+    if (!file) return;
+    try {
+      const texto = await file.text();
+      const r = parsearProyecto(texto);
+      if (r.ok) {
+        reemplazar(r.p);
+        setMsg(`Proyecto cargado desde «${file.name}».`);
+      } else {
+        setMsg(`No se pudo cargar «${file.name}»: ${r.error}`);
+      }
+    } catch {
+      setMsg("No se pudo leer el archivo.");
+    }
+  }
 
   function copiar() {
     const txt = JSON.stringify(p, null, 1);
@@ -160,34 +197,50 @@ export function PanelProyecto() {
       </div>
 
       <div className="card">
-        <h3>Datos del análisis</h3>
+        <h3>Guardar y cargar</h3>
+        <p className="hint">
+          Guarda el proyecto en un archivo <b>.json</b> para retomarlo después o compartirlo
+          con el equipo. Al cargar, se valida el archivo y se completan los campos que falten.
+        </p>
+        <div className="row">
+          <button className="btn primary" onClick={descargarJSON}>
+            Descargar proyecto (.json)
+          </button>
+          <button className="btn" onClick={() => inputArchivo.current?.click()}>
+            Cargar proyecto (.json)
+          </button>
+          <input
+            ref={inputArchivo}
+            type="file"
+            accept="application/json,.json"
+            onChange={onArchivo}
+            style={{ display: "none" }}
+            aria-hidden="true"
+          />
+        </div>
         <div className="row">
           <button className="btn" onClick={() => reemplazar(ejemplo())}>
             Cargar ejemplo de tarjetas de lealtad
           </button>
-          <button className="btn primary" onClick={() => reemplazar(plantillaEnBlanco())}>
+          <button className="btn" onClick={() => reemplazar(plantillaEnBlanco())}>
             Empezar un proyecto en blanco
           </button>
-          <button className="btn" onClick={copiar}>
-            Copiar datos (JSON)
-          </button>
+        </div>
+        <span className="hint" role="status">{msg}</span>
+      </div>
+
+      <details className="card">
+        <summary style={{ cursor: "pointer", fontWeight: 600 }}>
+          Copiar o pegar JSON (avanzado)
+        </summary>
+        <div className="row" style={{ marginTop: 10 }}>
+          <button className="btn" onClick={copiar}>Copiar datos (JSON)</button>
+          <button className="btn" onClick={importar}>Importar JSON pegado</button>
         </div>
         <div className="field">
-          <label>
-            Para guardar un análisis, copia el JSON y pégalo en un archivo. Para retomarlo,
-            pégalo aquí.
-          </label>
           <textarea value={io} onChange={(e) => setIo(e.target.value)} placeholder="Pega aquí el JSON para importar" />
         </div>
-        <div className="row">
-          <button className="btn" onClick={importar}>
-            Importar JSON
-          </button>
-          <span className="hint" role="status">
-            {msg}
-          </span>
-        </div>
-      </div>
+      </details>
     </section>
   );
 }

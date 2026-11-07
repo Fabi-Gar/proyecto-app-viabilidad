@@ -8,6 +8,7 @@
  * "Empezar en blanco" se evalúa cualquier proyecto.
  */
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { ProyCtx, type Mut } from "@/components/contexto";
 import { PanelProyecto } from "@/components/PanelProyecto";
 import { PanelRequerimientos } from "@/components/PanelRequerimientos";
@@ -145,6 +146,7 @@ export default function Page() {
           <div className="right">
             <span className="gscore">{fmt(m.total, 0)} / 100</span>
             <span className={"pill " + m.verdict.v}>{PILL[m.verdict.v]}</span>
+            <Link className="btn" href="/validacion">Validación</Link>
             <button className="btn primary" onClick={descargarPDF} disabled={generando}>
               {generando ? "Generando…" : "Descargar PDF"}
             </button>
