@@ -19,11 +19,14 @@ import {
   Svg,
   Polygon,
   Line,
+  Rect,
   Circle,
   Text as SvgText,
 } from "@react-pdf/renderer";
 import {
   DIMS,
+  RATING,
+  calc,
   money,
   pct,
   yrs,
@@ -33,7 +36,7 @@ import {
   vanFrom,
   type Model,
 } from "@/lib/calculo";
-import type { Proyecto, DimKey } from "@/lib/tipos";
+import type { Proyecto, DimKey, DimScoreKey } from "@/lib/tipos";
 
 /* ------------------------------- Paleta ---------------------------------- */
 const C = {
@@ -95,6 +98,9 @@ const styles = StyleSheet.create({
   tileS: { fontSize: 7.5, color: C.muted, marginTop: 1 },
   chip: { fontSize: 8, fontFamily: "Helvetica-Bold", paddingVertical: 1, paddingHorizontal: 5, borderRadius: 8 },
   split: { flexDirection: "row", gap: 10 },
+  fodaBox: { borderWidth: 1, borderColor: C.line, borderTopWidth: 2.5, borderRadius: 2, padding: 8 },
+  fodaTitle: { fontSize: 9, fontFamily: "Helvetica-Bold", textTransform: "uppercase", letterSpacing: 0.3, marginBottom: 3 },
+  fodaItem: { fontSize: 8.5, lineHeight: 1.4, color: C.ink, marginBottom: 1 },
 });
 
 /* ----------------------------- Utilidades UI ----------------------------- */
@@ -176,6 +182,60 @@ function HeatPDF({ p }: { p: Proyecto }) {
   );
 }
 
+/* --------------------------- Tornado (Svg) ------------------------------- */
+interface TorItem { n: string; lo: number; hi: number }
+
+/** Mismos cálculos que el tornado de la app: ±20% por variable (±5 pts en la tasa). */
+function tornadoItems(p: Proyecto): TorItem[] {
+  const r = p.tasa / 100;
+  const vv = (b: number, c: number, i: number) => calc(p, { b, c, i }).van;
+  return (
+    [
+      { n: "Beneficios", lo: vv(0.8, 1, 1), hi: vv(1.2, 1, 1) },
+      { n: "Costos operativos", lo: vv(1, 1.2, 1), hi: vv(1, 0.8, 1) },
+      { n: "Inversión inicial", lo: vv(1, 1, 1.2), hi: vv(1, 1, 0.8) },
+      {
+        n: "Tasa de descuento",
+        lo: calc(p, { b: 1, c: 1, i: 1 }, r + 0.05).van,
+        hi: calc(p, { b: 1, c: 1, i: 1 }, Math.max(0, r - 0.05)).van,
+      },
+    ] as TorItem[]
+  ).sort((a, b) => Math.abs(b.hi - b.lo) - Math.abs(a.hi - a.lo));
+}
+
+function TornadoPDF({ items, base }: { items: TorItem[]; base: number }) {
+  const W = 520, rowH = 30, top = 6, L = 118, Rr = 14;
+  const H = items.length * rowH + top + 22;
+  const vals = [base];
+  items.forEach((i) => vals.push(i.lo, i.hi));
+  const mn = Math.min(...vals), mx = Math.max(...vals);
+  const X = (v: number) => L + ((v - mn) / (mx - mn || 1)) * (W - L - Rr);
+  const xb = X(base);
+  return (
+    <Svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
+      {items.map((it, k) => {
+        const y = top + k * rowH;
+        return (
+          <Fragment key={it.n}>
+            <SvgText x={0} y={y + 16} style={{ fontSize: 8, fill: C.ink }}>{it.n}</SvgText>
+            {[it.lo, it.hi].map((v, j) => {
+              const x1 = X(Math.min(v, base)), x2 = X(Math.max(v, base));
+              return (
+                <Rect key={j} x={x1} y={y + 4} width={Math.max(1.5, x2 - x1)} height={16}
+                  fill={v >= base ? C.good : C.bad} fillOpacity={0.8} />
+              );
+            })}
+          </Fragment>
+        );
+      })}
+      <Line x1={xb} x2={xb} y1={top} y2={H - 18} stroke={C.ink} strokeWidth={0.8} />
+      <SvgText x={xb} y={H - 5} style={{ fontSize: 7.5, fill: C.muted }} textAnchor="middle">
+        VAN base
+      </SvgText>
+    </Svg>
+  );
+}
+
 /* ================================ Documento ============================== */
 export function InformePDF({ p, m, autores }: { p: Proyecto; m: Model; autores?: string }) {
   const mon = p.moneda;
@@ -203,6 +263,19 @@ export function InformePDF({ p, m, autores }: { p: Proyecto; m: Model; autores?:
   // Riesgos ordenados por residual desc.
   const riesgos = [...m.rk.rs].sort((a, b) => b.res - a.res);
 
+  // Tornado: variable que más mueve el VAN.
+  const tor = tornadoItems(p);
+
+  // Enfoques calificados por criterios (para el detalle de evidencia).
+  const dimsCrit = DIMS.filter((d) => d.crit);
+
+  // Escenarios con VAN y TIR.
+  const escenarios = [
+    { n: "Base", mul: { b: 100, c: 100, i: 100 }, r: f },
+    { n: "Pesimista", mul: p.esc.pes, r: m.pes },
+    { n: "Optimista", mul: p.esc.opt, r: m.opt },
+  ];
+
   return (
     <Document title={`Informe de viabilidad: ${p.nombre}`} author="Viabilidad 360">
       <Page size="A4" style={styles.page}>
@@ -211,7 +284,7 @@ export function InformePDF({ p, m, autores }: { p: Proyecto; m: Model; autores?:
         <Text style={styles.coverTitle}>{p.nombre || "Proyecto sin nombre"}</Text>
         <Text style={styles.coverMeta}>{fecha}</Text>
         <Text style={styles.coverMeta}>
-          {autores ? autores + " · " : ""}Analisis y Evaluacion de Proyectos
+          {autores ? autores + " · " : ""}Análisis y Evaluación de Proyectos
         </Text>
         <View style={styles.coverRule} />
         <View style={[styles.verdictBox, { backgroundColor: VERD_BG[v], borderLeftColor: VERD_FG[v] }]} wrap={false}>
@@ -224,8 +297,8 @@ export function InformePDF({ p, m, autores }: { p: Proyecto; m: Model; autores?:
 
         {/* 2. Documentación / resumen */}
         <View style={styles.section} wrap={false}>
-          <Text style={styles.h2}>Documentacion y resumen</Text>
-          <Text style={styles.p}>{p.desc || "Sin descripcion."}</Text>
+          <Text style={styles.h2}>Documentación y resumen</Text>
+          <Text style={styles.p}>{p.desc || "Sin descripción."}</Text>
         </View>
 
         {/* 3. Requerimientos */}
@@ -303,7 +376,7 @@ export function InformePDF({ p, m, autores }: { p: Proyecto; m: Model; autores?:
 
         {/* 6. Evaluación por enfoque */}
         <View style={styles.section}>
-          <Text style={styles.h2}>Evaluacion por enfoque</Text>
+          <Text style={styles.h2}>Evaluación por enfoque</Text>
           <View style={styles.split}>
             <View style={{ width: "48%" }}>
               <View style={styles.table}>
@@ -327,25 +400,144 @@ export function InformePDF({ p, m, autores }: { p: Proyecto; m: Model; autores?:
           </View>
         </View>
 
+        {/* 6b. Detalle de la evaluación por criterio (evidencia) */}
+        <View style={styles.section}>
+          <Text style={styles.h2}>Detalle de la evaluación por criterio</Text>
+          <Text style={[styles.p, styles.muted]}>
+            El puntaje de cada enfoque es el promedio de sus criterios (1 a 5)
+            llevado a escala 0-100. Aquí se ve la calificación y la evidencia de
+            cada criterio.
+          </Text>
+          {dimsCrit.map((d) => {
+            const k = d.k as DimScoreKey;
+            const cals = p.scores[k];
+            const nts = p.notes[k];
+            return (
+              <View key={d.k} style={{ marginTop: 8 }} wrap={false}>
+                <Text style={[styles.p, { fontFamily: "Helvetica-Bold" }]}>
+                  {d.n} — {F(m.sc[d.k])} / 100
+                </Text>
+                <View style={styles.table}>
+                  <View style={styles.tr}>
+                    <HCell w="40%">Criterio</HCell>
+                    <HCell w="18%">Calificación</HCell>
+                    <HCell w="42%">Nota / evidencia</HCell>
+                  </View>
+                  {d.crit!.map((c, i) => {
+                    const val = Math.min(5, Math.max(1, Math.round(cals[i] || 0)));
+                    return (
+                      <View key={i} style={i === d.crit!.length - 1 ? styles.trLast : styles.tr} wrap={false}>
+                        <Cell w="40%">{c[0]}</Cell>
+                        <Cell w="18%">{`${val} · ${RATING[val - 1]}`}</Cell>
+                        <Cell w="42%" color={C.muted}>{(nts[i] || "").trim() || "—"}</Cell>
+                      </View>
+                    );
+                  })}
+                </View>
+              </View>
+            );
+          })}
+        </View>
+
+        {/* 6c. Análisis FODA */}
+        <View style={styles.section} wrap={false}>
+          <Text style={styles.h2}>Análisis FODA</Text>
+          <View style={styles.split}>
+            <View style={{ width: "50%", gap: 8 }}>
+              <FodaBox title="Fortalezas" text={p.foda.f} v="go" />
+              <FodaBox title="Oportunidades" text={p.foda.o} v="go" />
+            </View>
+            <View style={{ width: "50%", gap: 8 }}>
+              <FodaBox title="Debilidades" text={p.foda.d} v="bad" />
+              <FodaBox title="Amenazas" text={p.foda.a} v="bad" />
+            </View>
+          </View>
+        </View>
+
         {/* 7. Análisis financiero */}
         <View style={styles.section}>
-          <Text style={styles.h2}>Analisis financiero</Text>
+          <Text style={styles.h2}>Análisis financiero</Text>
+
+          <Text style={[styles.p, { fontFamily: "Helvetica-Bold" }]}>Supuestos del modelo</Text>
+          <View style={styles.tilesRow}>
+            <Tile k="Horizonte" v={`${f.H} años`} />
+            <Tile k="Tasa de descuento" v={`${F(p.tasa, 1)}%`} s="Anual" />
+            <Tile k="Contingencia" v={`${F(p.conting)}%`} s="Sobre la inversión" />
+            <Tile k="Valor residual" v={M(p.residual)} s={`Año ${f.H}`} />
+          </View>
+
+          <View style={[styles.split, { marginTop: 8 }]}>
+            <View style={{ width: "100%" }}>
+              <Text style={[styles.p, styles.muted, { marginBottom: 3 }]}>Líneas de inversión (año 0)</Text>
+              <View style={styles.table}>
+                <View style={styles.tr}>
+                  <HCell w="76%">Concepto</HCell>
+                  <HCell w="24%" align="right">Monto</HCell>
+                </View>
+                {p.inv.map((x, i) => (
+                  <View key={i} style={i === p.inv.length - 1 ? styles.trLast : styles.tr} wrap={false}>
+                    <Cell w="76%">{x.n}</Cell>
+                    <Cell w="24%" align="right">{F(x.v)}</Cell>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </View>
+
+          <View style={[styles.split, { marginTop: 8 }]}>
+            <View style={{ width: "50%" }}>
+              <Text style={[styles.p, styles.muted, { marginBottom: 3 }]}>Beneficios anuales (año 1)</Text>
+              <View style={styles.table}>
+                <View style={styles.tr}>
+                  <HCell w="64%">Concepto</HCell>
+                  <HCell w="22%" align="right">Monto</HCell>
+                  <HCell w="14%" align="right">Crec.</HCell>
+                </View>
+                {p.ben.map((x, i) => (
+                  <View key={i} style={i === p.ben.length - 1 ? styles.trLast : styles.tr} wrap={false}>
+                    <Cell w="64%">{x.n}</Cell>
+                    <Cell w="22%" align="right">{F(x.v)}</Cell>
+                    <Cell w="14%" align="right">{F(x.g)}%</Cell>
+                  </View>
+                ))}
+              </View>
+            </View>
+            <View style={{ width: "50%" }}>
+              <Text style={[styles.p, styles.muted, { marginBottom: 3 }]}>Costos anuales (año 1)</Text>
+              <View style={styles.table}>
+                <View style={styles.tr}>
+                  <HCell w="64%">Concepto</HCell>
+                  <HCell w="22%" align="right">Monto</HCell>
+                  <HCell w="14%" align="right">Crec.</HCell>
+                </View>
+                {p.cos.map((x, i) => (
+                  <View key={i} style={i === p.cos.length - 1 ? styles.trLast : styles.tr} wrap={false}>
+                    <Cell w="64%">{x.n}</Cell>
+                    <Cell w="22%" align="right">{F(x.v)}</Cell>
+                    <Cell w="14%" align="right">{F(x.g)}%</Cell>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </View>
+
+          <Text style={[styles.p, { marginTop: 10, fontFamily: "Helvetica-Bold" }]}>Resultados</Text>
           <View style={styles.tilesRow}>
             <Tile k="VAN" v={M(f.van)} s={f.van > 0 ? "Crea valor" : "Destruye valor"} />
             <Tile k="TIR" v={P(f.tir)} s={`Tasa ${F(p.tasa, 1)}%`} />
             <Tile k="Beneficio / costo" v={f.bc == null ? "n/d" : F(f.bc, 2)} s="VP beneficios / costos" />
-            <Tile k="Recuperacion" v={Y(f.pb)} s="Sin descontar" />
-            <Tile k="Recuperacion desc." v={Y(f.pbd)} s={`Horizonte ${f.H} anios`} />
-            <Tile k="Inversion total" v={M(f.inv0)} s={`Incluye ${F(p.conting)}% conting.`} />
+            <Tile k="Recuperación" v={Y(f.pb)} s="Sin descontar" />
+            <Tile k="Recuperación desc." v={Y(f.pbd)} s={`Horizonte ${f.H} años`} />
+            <Tile k="Inversión total" v={M(f.inv0)} s={`Incluye ${F(p.conting)}% conting.`} />
           </View>
 
           <Text style={[styles.p, { marginTop: 10, fontFamily: "Helvetica-Bold" }]}>Flujo de caja proyectado</Text>
           <View style={styles.table}>
             <View style={styles.tr}>
-              <HCell w="12%">Anio</HCell>
+              <HCell w="12%">Año</HCell>
               <HCell w="20%" align="right">Beneficios</HCell>
               <HCell w="18%" align="right">Costos</HCell>
-              <HCell w="18%" align="right">Inversion</HCell>
+              <HCell w="18%" align="right">Inversión</HCell>
               <HCell w="16%" align="right">Flujo neto</HCell>
               <HCell w="16%" align="right">Acumulado</HCell>
             </View>
@@ -362,9 +554,9 @@ export function InformePDF({ p, m, autores }: { p: Proyecto; m: Model; autores?:
           </View>
 
           <Text style={[styles.p, { marginTop: 10, fontFamily: "Helvetica-Bold" }]}>
-            Analisis de sensibilidad (VAN)
+            Análisis de sensibilidad (VAN)
           </Text>
-          <Text style={[styles.p, styles.muted]}>Beneficios (filas) vs. costos de inversion y operacion (columnas).</Text>
+          <Text style={[styles.p, styles.muted]}>Beneficios (filas) vs. costos de inversión y operación (columnas).</Text>
           <View style={styles.table}>
             <View style={styles.tr}>
               <HCell w="16%">Ben \ Cost</HCell>
@@ -384,13 +576,47 @@ export function InformePDF({ p, m, autores }: { p: Proyecto; m: Model; autores?:
             ))}
           </View>
 
-          <Text style={[styles.p, { marginTop: 10, fontFamily: "Helvetica-Bold" }]}>Simulacion Monte Carlo (5,000 corridas)</Text>
+          <Text style={[styles.p, { marginTop: 10, fontFamily: "Helvetica-Bold" }]}>Escenarios</Text>
+          <Text style={[styles.p, styles.muted]}>
+            Multiplicadores (%) aplicados a beneficios (B), costos (C) e inversión (I).
+          </Text>
+          <View style={styles.table}>
+            <View style={styles.tr}>
+              <HCell w="24%">Escenario</HCell>
+              <HCell w="30%">Multiplicadores</HCell>
+              <HCell w="26%" align="right">VAN</HCell>
+              <HCell w="20%" align="right">TIR</HCell>
+            </View>
+            {escenarios.map((e, i) => (
+              <View key={e.n} style={i === escenarios.length - 1 ? styles.trLast : styles.tr} wrap={false}>
+                <Cell w="24%" bold>{e.n}</Cell>
+                <Cell w="30%" color={C.muted}>
+                  {`B ${F(e.mul.b)}% · C ${F(e.mul.c)}% · I ${F(e.mul.i)}%`}
+                </Cell>
+                <Cell w="26%" align="right" color={e.r.van >= 0 ? C.good : C.bad}>{M(e.r.van)}</Cell>
+                <Cell w="20%" align="right">{P(e.r.tir)}</Cell>
+              </View>
+            ))}
+          </View>
+
+          <Text style={[styles.p, { marginTop: 10, fontFamily: "Helvetica-Bold" }]}>Simulación Monte Carlo (5,000 corridas)</Text>
           <View style={styles.tilesRow}>
             <Tile k="VAN promedio" v={M(m.mcr.mean)} />
             <Tile k="Prob. VAN > 0" v={P(m.mcr.p, 1)} />
             <Tile k="VAN percentil 5" v={M(m.mcr.p5)} s="Caso adverso" />
             <Tile k="VAN mediana" v={M(m.mcr.p50)} />
             <Tile k="VAN percentil 95" v={M(m.mcr.p95)} s="Caso favorable" />
+          </View>
+
+          <Text style={[styles.p, { marginTop: 10, fontFamily: "Helvetica-Bold" }]}>
+            Sensibilidad por variable (tornado)
+          </Text>
+          <Text style={[styles.p, styles.muted]}>
+            Cada barra aplica ±20% a la variable (±5 puntos en la tasa de descuento).
+            La variable que más mueve el VAN es «{tor[0].n}».
+          </Text>
+          <View wrap={false}>
+            <TornadoPDF items={tor} base={f.van} />
           </View>
         </View>
 
@@ -436,7 +662,7 @@ export function InformePDF({ p, m, autores }: { p: Proyecto; m: Model; autores?:
         {/* 10. Dictamen y recomendaciones */}
         <View style={styles.section}>
           <Text style={styles.h2}>Dictamen y recomendaciones</Text>
-          <View style={styles.table}>
+          <View style={styles.table} wrap={false}>
             {m.verdict.checks.map((c, i) => (
               <View key={i} style={i === m.verdict.checks.length - 1 ? styles.trLast : styles.tr} wrap={false}>
                 <Cell w="14%" bold color={c.ok ? C.good : C.bad}>{c.ok ? "Cumple" : "Falta"}</Cell>
@@ -469,6 +695,23 @@ function Tile({ k, v, s }: { k: string; v: string; s?: string }) {
       <Text style={styles.tileK}>{k}</Text>
       <Text style={styles.tileV}>{v}</Text>
       {s ? <Text style={styles.tileS}>{s}</Text> : null}
+    </View>
+  );
+}
+
+function FodaBox({ title, text, v }: { title: string; text: string; v: "go" | "bad" }) {
+  const col = v === "go" ? C.good : C.bad;
+  const lines = (text || "").split("\n").map((l) => l.trim()).filter(Boolean);
+  return (
+    <View style={[styles.fodaBox, { borderTopColor: col }]} wrap={false}>
+      <Text style={[styles.fodaTitle, { color: col }]}>{title}</Text>
+      {lines.length === 0 ? (
+        <Text style={[styles.fodaItem, { color: C.muted }]}>Sin datos.</Text>
+      ) : (
+        lines.map((l, i) => (
+          <Text key={i} style={styles.fodaItem}>{"• " + l}</Text>
+        ))
+      )}
     </View>
   );
 }
