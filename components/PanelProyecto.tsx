@@ -4,10 +4,17 @@
  *  botones para cargar el ejemplo, empezar en blanco e importar/copiar JSON. */
 import { useState } from "react";
 import { useProy } from "./contexto";
-import { TextInput } from "./campos";
+import { TextInput, Select } from "./campos";
 import { ejemplo, plantillaEnBlanco } from "@/lib/ejemplos";
 import { validar } from "@/lib/validacion";
 import { parsearProyecto } from "@/lib/esquema";
+import type { ResultadoValidacion } from "@/lib/tipos";
+
+const RESULTADO_OPTS: [ResultadoValidacion, string][] = [
+  ["Sin dato", "Sin dato"],
+  ["Éxito", "Éxito"],
+  ["Fracaso", "Fracaso"],
+];
 
 export function PanelProyecto() {
   const { p, mut, reemplazar } = useProy();
@@ -114,6 +121,42 @@ export function PanelProyecto() {
             riesgos críticos o una dimensión bajo 30.
           </li>
         </ul>
+      </div>
+
+      <div className="card">
+        <h3>Datos de validación del caso</h3>
+        <p className="hint">
+          Para el anexo de validación: registra el resultado real conocido del proyecto
+          (si lo hubo), de dónde salen las cifras y cualquier nota. Sirve para comparar el
+          dictamen de la calculadora contra lo que de verdad pasó.
+        </p>
+        <div className="grid">
+          <div className="field">
+            <label>Resultado real</label>
+            <Select
+              value={p.validacion.resultadoReal}
+              onPick={(v) => mut((n) => { n.validacion.resultadoReal = v; })}
+              options={RESULTADO_OPTS}
+              aria-label="Resultado real"
+            />
+          </div>
+          <div className="field">
+            <label>Fuente</label>
+            <TextInput
+              value={p.validacion.fuente}
+              onText={(v) => mut((n) => { n.validacion.fuente = v; })}
+              placeholder="Texto o URL de la fuente del caso"
+            />
+          </div>
+        </div>
+        <div className="field">
+          <label>Notas</label>
+          <textarea
+            value={p.validacion.notas}
+            onChange={(e) => mut((n) => { n.validacion.notas = e.target.value; })}
+            placeholder="Contexto del caso, observaciones o por qué coincide o no con el dictamen"
+          />
+        </div>
       </div>
 
       <div className="card">

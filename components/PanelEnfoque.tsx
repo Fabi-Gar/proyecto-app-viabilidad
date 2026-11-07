@@ -5,6 +5,8 @@
  *  editor de fases del ciclo de vida (Ciclo de vida). */
 import { useProy } from "./contexto";
 import { TextInput, Select } from "./campos";
+import { PestelEditor, BscEditor } from "./EstrategiaEditors";
+import { KpiEditor } from "./KpiEditor";
 import { RATING, fmt, type Dim } from "@/lib/calculo";
 import type { DimScoreKey, EstadoFase } from "@/lib/tipos";
 
@@ -136,7 +138,10 @@ export function PanelEnfoque({ dim }: { dim: Dim }) {
         ))}
       </div>
       {dim.foda && <Foda />}
+      {dim.foda && <PestelEditor />}
+      {dim.foda && <BscEditor />}
       {dim.kpis && <CicloVidaEditor />}
+      {dim.kpis && <KpiEditor />}
     </section>
   );
 }

@@ -274,3 +274,26 @@ svg .tx { fill: var(--ink); }
 .invalid { border-color: var(--bad) !important; }
 .valrow { display: flex; gap: 8px; font-size: 13px; padding: 5px 0; align-items: baseline; }
 .valrow b { flex: 0 0 auto; }
+
+/* mapa estratégico de TI (BSC) */
+.mapa { display: flex; flex-direction: column; gap: 0; }
+.mapa-band {
+  display: grid; grid-template-columns: 150px 1fr;
+  border: 1px solid var(--line); border-radius: 2px; overflow: hidden; background: var(--surface);
+}
+.mapa-band-label {
+  background: var(--navy); color: var(--navy-ink); font-weight: 600; font-size: 10.5px;
+  text-transform: uppercase; letter-spacing: 0.04em; padding: 10px 12px;
+  display: flex; align-items: center;
+}
+.mapa-cards { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; align-items: flex-start; }
+.mapa-card {
+  background: var(--accent-soft); border: 1px solid var(--line); border-left: 3px solid var(--accent);
+  border-radius: 2px; padding: 8px 10px; max-width: 260px; font-size: 12.5px;
+}
+.mapa-obj { font-weight: 600; color: var(--ink); }
+.mapa-ti { font-size: 11px; color: var(--muted); margin-top: 3px; }
+.mapa-arrow { text-align: center; color: var(--accent); font-size: 18px; line-height: 1; padding: 3px 0; }
+@media (max-width: 560px) {
+  .mapa-band { grid-template-columns: 1fr; }
+}
