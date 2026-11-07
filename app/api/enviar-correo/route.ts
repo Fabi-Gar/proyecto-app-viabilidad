@@ -34,10 +34,16 @@ export async function POST(req: Request) {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM;
   if (!apiKey || !from) {
+    const faltan = [!apiKey && "RESEND_API_KEY", !from && "EMAIL_FROM"]
+      .filter(Boolean)
+      .join(" y ");
     return Response.json(
       {
         error:
-          "El envío de correo no está configurado todavía. Falta RESEND_API_KEY y/o EMAIL_FROM en el servidor (se configura al desplegar con el dominio verificado).",
+          `El envío de correo aún no está configurado: falta ${faltan} en el servidor. ` +
+          "El equipo debe agregar esa(s) variable(s) de entorno con un dominio verificado en Resend " +
+          "(ver docs/manual-administrador.md). Mientras tanto, puedes descargar el PDF o compartir por WhatsApp.",
+        noConfigurado: true,
       },
       { status: 503 }
     );
