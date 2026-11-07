@@ -9,14 +9,9 @@ import { Resend } from "resend";
 import { InformePDF } from "@/pdf/InformePDF";
 import { InformeEmail } from "@/emails/InformeEmail";
 import { model } from "@/lib/calculo";
-import type { Proyecto } from "@/lib/tipos";
+import { esEstructuraValida, completarProyecto } from "@/lib/esquema";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function esProyecto(o: unknown): o is Proyecto {
-  const p = o as Proyecto;
-  return !!p && p.v === 1 && Array.isArray(p.inv) && !!p.scores && Array.isArray(p.riesgos);
-}
 
 export async function POST(req: Request) {
   let body: { proyecto?: unknown; destino?: unknown; urlInforme?: unknown };
@@ -31,9 +26,10 @@ export async function POST(req: Request) {
   if (typeof destino !== "string" || !EMAIL_RE.test(destino.trim())) {
     return Response.json({ error: "Correo de destino inválido." }, { status: 400 });
   }
-  if (!esProyecto(proyecto)) {
+  if (!esEstructuraValida(proyecto)) {
     return Response.json({ error: "Datos del proyecto inválidos." }, { status: 400 });
   }
+  completarProyecto(proyecto);
 
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM;

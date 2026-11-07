@@ -7,6 +7,7 @@
  * necesita servidor de datos: suficiente para el curso.
  */
 import type { Proyecto } from "./tipos";
+import { normalizarProyecto } from "./esquema";
 
 /** Codifica un proyecto a una cadena segura para URL. */
 export function codificar(p: Proyecto): string {
@@ -22,12 +23,8 @@ export function decodificar(s: string): Proyecto | null {
     const b64 = s.replace(/-/g, "+").replace(/_/g, "/");
     const bin = atob(b64);
     const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0));
-    const o = JSON.parse(new TextDecoder().decode(bytes)) as Proyecto;
-    if (!o || o.v !== 1 || !o.inv || !o.scores || !o.riesgos) return null;
-    o.requerimientos = o.requerimientos ?? [];
-    o.cicloVida = o.cicloVida ?? [];
-    o.cronograma = o.cronograma ?? [];
-    return o;
+    const o = JSON.parse(new TextDecoder().decode(bytes));
+    return normalizarProyecto(o);
   } catch {
     return null;
   }

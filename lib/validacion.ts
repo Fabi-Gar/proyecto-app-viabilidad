@@ -8,6 +8,7 @@
 
 import type { Proyecto } from "./tipos";
 import { N } from "./calculo";
+import { PERSPECTIVAS_BSC } from "./esquema";
 
 export type Nivel = "error" | "aviso";
 
@@ -49,6 +50,28 @@ export function validar(p: Proyecto): Aviso[] {
   if (!p.cronograma.length) avi("Cronograma", "El cronograma está vacío.");
   if (p.cronograma.some((c) => !c.fase.trim() || !c.inicio || !c.fin))
     avi("Cronograma", "Hay fases del cronograma sin nombre o sin fechas.");
+
+  // Estrategia: PESTEL y BSC (pestaña Estratégica)
+  if (!p.pestel.length) {
+    avi("Estratégica", "No se registró el análisis PESTEL.");
+  } else if (p.pestel.some((f) => !f.descripcion.trim())) {
+    avi("Estratégica", "Hay factores PESTEL sin describir.");
+  }
+  if (!p.bsc.length) {
+    avi("Estratégica", "No se registraron objetivos del Balanced Scorecard.");
+  } else {
+    PERSPECTIVAS_BSC.forEach((persp) => {
+      const hay = p.bsc.some((o) => o.perspectiva === persp && o.objetivo.trim());
+      if (!hay) avi("Estratégica", `La perspectiva «${persp}» del BSC no tiene objetivos.`);
+    });
+  }
+
+  // Monitoreo: KPIs (pestaña Ciclo de vida)
+  if (!p.kpis.length) {
+    avi("Ciclo de vida", "No se registraron indicadores (KPIs) de monitoreo.");
+  } else if (p.kpis.some((k) => !k.indicador.trim())) {
+    avi("Ciclo de vida", "Hay indicadores (KPIs) sin nombre.");
+  }
 
   return a;
 }

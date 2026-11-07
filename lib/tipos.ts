@@ -86,6 +86,60 @@ export interface Foda {
   a: string; // amenazas
 }
 
+/* ----------------------- Análisis estratégico extra ---------------------- */
+
+export type TipoPestel =
+  | "Político"
+  | "Económico"
+  | "Social"
+  | "Tecnológico"
+  | "Ambiental"
+  | "Legal";
+
+export type EfectoPestel = "Favorable" | "Neutro" | "Desfavorable";
+
+/** Factor del análisis PESTEL (entorno externo). */
+export interface FactorPestel {
+  tipo: TipoPestel;
+  descripcion: string;
+  efecto: EfectoPestel;
+  nota: string; // evidencia o fuente
+}
+
+export type PerspectivaBSC =
+  | "Financiera"
+  | "Clientes"
+  | "Procesos internos"
+  | "Aprendizaje y crecimiento";
+
+/** Objetivo del Balanced Scorecard; también alimenta el mapa estratégico de TI. */
+export interface ObjetivoBSC {
+  perspectiva: PerspectivaBSC;
+  objetivo: string;
+  iniciativaTI: string; // componente de TI del proyecto que lo habilita
+  indicador: string;
+  meta: string;
+}
+
+/** Indicador del plan de monitoreo y evaluación ex-post. */
+export interface KPI {
+  indicador: string;
+  meta: string;
+  frecuencia: string;
+  responsable: string;
+  fuente: string; // de dónde sale el dato
+  valorReal?: string; // opcional: valor medido, para la evaluación ex-post
+}
+
+export type ResultadoValidacion = "Éxito" | "Fracaso" | "Sin dato";
+
+/** Datos del caso de validación del anexo (resultado real conocido). */
+export interface DatosValidacion {
+  resultadoReal: ResultadoValidacion;
+  fuente: string; // texto o URL de donde salen las cifras del caso
+  notas: string;
+}
+
 /* ======================= Campos nuevos del informe ======================= */
 
 export type TipoRequerimiento = "Funcional" | "No funcional";
@@ -143,4 +197,13 @@ export interface Proyecto {
   requerimientos: Requerimiento[];
   cicloVida: FaseCicloVida[];
   cronograma: FaseCronograma[];
+  // Documentación y evidencia estratégica. En el esquema persistido son
+  // opcionales (proyectos antiguos no los traen); `completarProyecto`
+  // (lib/esquema.ts) los rellena con valores por defecto en cada carga, así
+  // que dentro de la app siempre están presentes y el resto del código los
+  // usa sin comprobaciones.
+  pestel: FactorPestel[];
+  bsc: ObjetivoBSC[];
+  kpis: KPI[];
+  validacion: DatosValidacion;
 }

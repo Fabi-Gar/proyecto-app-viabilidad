@@ -19,6 +19,7 @@ import { PanelDictamen } from "@/components/PanelDictamen";
 import { DIMS, model, fmt } from "@/lib/calculo";
 import { validar, contarErrores } from "@/lib/validacion";
 import { ejemplo } from "@/lib/ejemplos";
+import { normalizarProyecto } from "@/lib/esquema";
 import type { Proyecto } from "@/lib/tipos";
 
 const CLAVE = "viabilidad360-v1";
@@ -41,13 +42,8 @@ export default function Page() {
     try {
       const raw = localStorage.getItem(CLAVE);
       if (raw) {
-        const o = JSON.parse(raw) as Proyecto;
-        if (o && o.v === 1 && o.inv && o.scores && o.riesgos) {
-          o.requerimientos = o.requerimientos ?? [];
-          o.cicloVida = o.cicloVida ?? [];
-          o.cronograma = o.cronograma ?? [];
-          setP(o);
-        }
+        const o = normalizarProyecto(JSON.parse(raw));
+        if (o) setP(o);
       }
     } catch {
       /* ignora almacenamiento no disponible */

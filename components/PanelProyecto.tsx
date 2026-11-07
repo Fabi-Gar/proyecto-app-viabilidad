@@ -7,7 +7,7 @@ import { useProy } from "./contexto";
 import { TextInput } from "./campos";
 import { ejemplo, plantillaEnBlanco } from "@/lib/ejemplos";
 import { validar } from "@/lib/validacion";
-import type { Proyecto } from "@/lib/tipos";
+import { parsearProyecto } from "@/lib/esquema";
 
 export function PanelProyecto() {
   const { p, mut, reemplazar } = useProy();
@@ -30,17 +30,12 @@ export function PanelProyecto() {
   }
 
   function importar() {
-    try {
-      const o = JSON.parse(io) as Proyecto;
-      if (!o || o.v !== 1 || !o.inv || !o.scores || !o.riesgos) throw new Error();
-      // Compatibilidad: completa campos nuevos si el JSON es de una versión previa.
-      o.requerimientos = o.requerimientos ?? [];
-      o.cicloVida = o.cicloVida ?? [];
-      o.cronograma = o.cronograma ?? [];
-      reemplazar(o);
+    const r = parsearProyecto(io);
+    if (r.ok) {
+      reemplazar(r.p);
       setMsg("Datos importados.");
-    } catch {
-      setMsg("El texto no es un análisis válido.");
+    } else {
+      setMsg(r.error);
     }
   }
 

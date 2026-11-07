@@ -11,6 +11,7 @@
  */
 
 import { DIMS } from "./calculo";
+import { pestelVacio, bscVacio, validacionVacia } from "./esquema";
 import type { Proyecto, Scores, Notes, DimScoreKey } from "./tipos";
 
 /** Construye scores (1-5) y notes por criterio. `v` da valores iniciales. */
@@ -148,6 +149,95 @@ export function ejemplo(): Proyecto {
       { fase: "Piloto con un negocio", inicio: "2026-04-20", fin: "2026-05-29", responsable: "Negocio + soporte" },
       { fase: "Puesta en marcha", inicio: "2026-06-01", fin: "2026-06-12", responsable: "Soporte" },
     ],
+    // ---- Evidencia estratégica (supuestos del equipo, contexto Guatemala) ----
+    pestel: [
+      {
+        tipo: "Político",
+        descripcion: "Políticas de digitalización de pagos y estabilidad regulatoria en Guatemala.",
+        efecto: "Neutro",
+        nota: "Sin incentivos específicos ni barreras directas a las billeteras digitales (supuesto del equipo).",
+      },
+      {
+        tipo: "Económico",
+        descripcion: "Crecimiento del consumo y alta penetración de smartphones en el mercado local.",
+        efecto: "Favorable",
+        nota: "Más teléfonos inteligentes facilitan la adopción de la tarjeta en el wallet.",
+      },
+      {
+        tipo: "Social",
+        descripcion: "Clientes jóvenes acostumbrados a programas de lealtad y a guardar tarjetas en el teléfono.",
+        efecto: "Favorable",
+        nota: "Hábito creciente de usar Apple/Google Wallet.",
+      },
+      {
+        tipo: "Tecnológico",
+        descripcion: "APIs maduras de Apple PassKit y Google Wallet para emitir pases.",
+        efecto: "Favorable",
+        nota: "La tecnología existe y está documentada, aunque la controlan terceros.",
+      },
+      {
+        tipo: "Ambiental",
+        descripcion: "Sustituye tarjetas plásticas y volantes impresos por pases digitales.",
+        efecto: "Favorable",
+        nota: "Menor consumo de plástico y papel frente a un programa físico.",
+      },
+      {
+        tipo: "Legal",
+        descripcion: "Protección de datos personales de los clientes inscritos.",
+        efecto: "Desfavorable",
+        nota: "Exige consentimiento, resguardo y uso limitado de los datos; aumenta la carga de cumplimiento.",
+      },
+    ],
+    bsc: [
+      {
+        perspectiva: "Financiera",
+        objetivo: "Aumentar la facturación por recompra de clientes inscritos",
+        iniciativaTI: "Motor de campañas y notificaciones push del programa",
+        indicador: "Ingreso incremental mensual",
+        meta: "+10% anual",
+      },
+      {
+        perspectiva: "Clientes",
+        objetivo: "Elevar la frecuencia de visita de los clientes",
+        iniciativaTI: "Tarjeta de sellos en Apple y Google Wallet",
+        indicador: "Visitas por cliente al mes",
+        meta: "≥ 3",
+      },
+      {
+        perspectiva: "Clientes",
+        objetivo: "Mejorar la satisfacción y la lealtad",
+        iniciativaTI: "Premios y recompensas automatizadas al completar sellos",
+        indicador: "Tasa de canje de premios",
+        meta: "≥ 25%",
+      },
+      {
+        perspectiva: "Procesos internos",
+        objetivo: "Agilizar el sellado de visitas en caja",
+        iniciativaTI: "Lectura de código QR integrada al punto de venta",
+        indicador: "Tiempo de sellado por transacción",
+        meta: "< 5 segundos",
+      },
+      {
+        perspectiva: "Aprendizaje y crecimiento",
+        objetivo: "Capacitar al personal en el nuevo flujo de sellado y canje",
+        iniciativaTI: "Panel de administración y guía de uso",
+        indicador: "Personal capacitado",
+        meta: "100%",
+      },
+    ],
+    kpis: [
+      { indicador: "Tarjetas activas en el wallet", meta: "≥ 500 en el año 1", frecuencia: "Mensual", responsable: "Marketing", fuente: "Panel de administración" },
+      { indicador: "Sellos por cliente al mes", meta: "≥ 3", frecuencia: "Mensual", responsable: "Operaciones", fuente: "Base de datos de sellos" },
+      { indicador: "Tasa de canje de premios", meta: "≥ 25%", frecuencia: "Mensual", responsable: "Marketing", fuente: "Panel de administración" },
+      { indicador: "Frecuencia de compra de inscritos", meta: "+15% frente a no inscritos", frecuencia: "Trimestral", responsable: "Gerencia", fuente: "Ventas del punto de venta" },
+      { indicador: "Costo por premio canjeado", meta: "≤ Q 20", frecuencia: "Mensual", responsable: "Finanzas", fuente: "Contabilidad" },
+      { indicador: "Clientes nuevos inscritos", meta: "≥ 50 al mes", frecuencia: "Mensual", responsable: "Marketing", fuente: "Panel de administración" },
+    ],
+    validacion: {
+      resultadoReal: "Sin dato",
+      fuente: "Supuestos del equipo",
+      notas: "Proyecto de demostración; aún sin implementación real con la cual comparar lo proyectado.",
+    },
   };
 }
 
@@ -187,5 +277,10 @@ export function plantillaEnBlanco(): Proyecto {
       { fase: "Evaluación ex-post", estado: "Pendiente", nota: "" },
     ],
     cronograma: [],
+    // ---- Evidencia estratégica (vacía, lista para llenar) ----
+    pestel: pestelVacio(),
+    bsc: bscVacio(),
+    kpis: [],
+    validacion: validacionVacia(),
   };
 }
